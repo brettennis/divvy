@@ -1,9 +1,14 @@
-import PurchaseList from './app/screens/WelcomeScreen';
-import { 
-} from 'react-native';
+import PurchaseList from './app/screens/PurchaseList';
+import Header from './app/screens/Header';
+import Footer from './app/screens/Footer';
+import { View } from 'react-native';
 
 export default function App() {
   return (
-    <PurchaseList />
+    <>
+      <Header />
+      <PurchaseList />
+      <Footer />
+    </>
   );
 }

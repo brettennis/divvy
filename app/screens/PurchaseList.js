@@ -1,30 +1,146 @@
-import { View, Text, StyleSheet } from "react-native";
+import { 
+    View, 
+    Text, 
+    StyleSheet, 
+    FlatList, 
+    TouchableOpacity,
+} from 'react-native';
+import { useState } from 'react';
+import 'react-native-get-random-values';
+import { v4 as uuid } from 'uuid';
 
+import Purchase from './Purchase';
 
-export default function PurchaseList(props) {
+const items = [
+{
+    "amount" : 19,
+    "description" : "Parmigiana",
+    "flags" : "",
+    "qty" : 1,
+    "remarks" : null,
+    "unitPrice" : null
+}, {
+    "amount" : 12,
+    "description" : "Old Fashioned",
+    "flags" : "",
+    "qty" : 1,
+    "remarks" : null,
+    "unitPrice" : null
+}, {
+    "amount" : 21,
+    "description" : "Marsala",
+    "flags" : "",
+    "qty" : 1,
+    "remarks" : null,
+    "unitPrice" : null
+}, {
+    "amount" : 10,
+    "description" : "Caprese",
+    "flags" : "",
+    "qty" : 1,
+    "remarks" : null,
+    "unitPrice" : null
+}, {
+    "amount" : 7,
+    "description" : "Risotto",
+    "flags" : "",
+    "qty" : 1,
+    "remarks" : null,
+    "unitPrice" : null
+}, {
+    "amount" : 15,
+    "description" : "Quattro Formaggi",
+    "flags" : "",
+    "qty" : 1,
+    "remarks" : null,
+    "unitPrice" : null
+}, {
+    "amount" : 24,
+    "description" : "Grilled Salmon",
+    "flags" : "",
+    "qty" : 1,
+    "remarks" : null,
+    "unitPrice" : null
+}, {
+    "amount" : 19,
+    "description" : "Al Pesto",
+    "flags" : "",
+    "qty" : 1,
+    "remarks" : null,
+    "unitPrice" : null
+}, {
+    "amount" : 5,
+    "description" : "Limoncello",
+    "flags" : "",
+    "qty" : 1,
+    "remarks" : null,
+    "unitPrice" : null
+} 
+];
+
+const patrons = [
+{
+    nameFirst: "Joey",
+    nameLast: "Tribbiani",
+    phone: "",
+    isBillPayer: false,
+    isCashTipper: false
+}, {
+    nameFirst: "Ross",
+    nameLast: "Geller",
+    phone: "",
+    isBillPayer: false,
+    isCashTipper: false
+}, {
+    nameFirst: "Chandler",
+    nameLast: "Bing",
+    phone: "",
+    isBillPayer: false,
+    isCashTipper: false
+}, {
+    nameFirst: "Monica",
+    nameLast: "Geller",
+    phone: "",
+    isBillPayer: false,
+    isCashTipper: false
+}, {
+    nameFirst: "Phoebe",
+    nameLast: "Buffay",
+    phone: "",
+    isBillPayer: false,
+    isCashTipper: false
+}, {
+    nameFirst: "Rachel",
+    nameLast: "Green",
+    phone: "",
+    isBillPayer: false,
+    isCashTipper: false
+}
+];
+
+export default function PurchaseList() {
+
+    const items2 = items.concat(items);
+
     return (
         <View style={styles.container}>
-            <View style={styles.loginButton}></View>
-            <View style={styles.registerButton}></View>
+            <FlatList style={styles.listContainer}
+                data={items}
+                renderItem={({item}) => <Purchase item={item}/>}
+                keyExtractor={item => uuid()}
+            />
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: 'lightgrey',
+        backgroundColor: 'black',
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'flex-end'
+        justifyContent: 'center',
     },
-    loginButton: {
-        backgroundColor: '#fc5c65',
-        height: 70,
-        width: '100%'
+    listContainer: {
+        width: '100%',
     },
-    registerButton: {
-        backgroundColor: '#4ecdc4',
-        height: 70,
-        width: '100%'
-    }
 })

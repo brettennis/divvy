@@ -1,5 +1,5 @@
 
-export default {
+export default { receiptSource: {
     "request_id" : "P_218.186.139.27_kl96a7ie_o9k",
     "ref_no" : "AspDemo_1613550458205_154",
     "file_name" : "SG-01s.jpg",
@@ -116,4 +116,4 @@ export default {
             "merchant_tax_reg_no" : [ [ { "y" : 444, "x" : 574 }, { "y" : 438, "x" : 856 }, { "y" : 482, "x" : 857 }, { "y" : 488, "x" : 575 } ] ]
         }
         } ]
-}
+}}
