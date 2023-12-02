@@ -13,6 +13,7 @@ import Purchase from './Purchase';
 
 const items = [
 {
+    'id' : 0,
     "amount" : 19,
     "description" : "Parmigiana",
     "flags" : "",
@@ -20,6 +21,7 @@ const items = [
     "remarks" : null,
     "unitPrice" : null
 }, {
+    'id' : 1,
     "amount" : 12,
     "description" : "Old Fashioned",
     "flags" : "",
@@ -27,6 +29,7 @@ const items = [
     "remarks" : null,
     "unitPrice" : null
 }, {
+    'id' : 2,
     "amount" : 21,
     "description" : "Marsala",
     "flags" : "",
@@ -34,6 +37,7 @@ const items = [
     "remarks" : null,
     "unitPrice" : null
 }, {
+    'id' : 3,
     "amount" : 10,
     "description" : "Caprese",
     "flags" : "",
@@ -41,6 +45,7 @@ const items = [
     "remarks" : null,
     "unitPrice" : null
 }, {
+    'id' : 4,
     "amount" : 7,
     "description" : "Risotto",
     "flags" : "",
@@ -48,6 +53,7 @@ const items = [
     "remarks" : null,
     "unitPrice" : null
 }, {
+    'id' : 5,
     "amount" : 15,
     "description" : "Quattro Formaggi",
     "flags" : "",
@@ -55,6 +61,7 @@ const items = [
     "remarks" : null,
     "unitPrice" : null
 }, {
+    'id' : 6,
     "amount" : 24,
     "description" : "Grilled Salmon",
     "flags" : "",
@@ -62,6 +69,7 @@ const items = [
     "remarks" : null,
     "unitPrice" : null
 }, {
+    'id' : 7,
     "amount" : 19,
     "description" : "Al Pesto",
     "flags" : "",
@@ -69,6 +77,7 @@ const items = [
     "remarks" : null,
     "unitPrice" : null
 }, {
+    'id' : 8,
     "amount" : 5,
     "description" : "Limoncello",
     "flags" : "",
@@ -78,55 +87,101 @@ const items = [
 } 
 ];
 
-const patrons = [
-{
-    nameFirst: "Joey",
-    nameLast: "Tribbiani",
-    phone: "",
-    isBillPayer: false,
-    isCashTipper: false
-}, {
-    nameFirst: "Ross",
-    nameLast: "Geller",
-    phone: "",
-    isBillPayer: false,
-    isCashTipper: false
-}, {
-    nameFirst: "Chandler",
-    nameLast: "Bing",
-    phone: "",
-    isBillPayer: false,
-    isCashTipper: false
-}, {
-    nameFirst: "Monica",
-    nameLast: "Geller",
-    phone: "",
-    isBillPayer: false,
-    isCashTipper: false
-}, {
-    nameFirst: "Phoebe",
-    nameLast: "Buffay",
-    phone: "",
-    isBillPayer: false,
-    isCashTipper: false
-}, {
-    nameFirst: "Rachel",
-    nameLast: "Green",
-    phone: "",
-    isBillPayer: false,
-    isCashTipper: false
-}
+const patronsInitialize = [
+    {
+        id: 0,
+        nameFirst: "Joey",
+        nameLast: "Tribbiani",
+        phone: "",
+        isBillPayer: false,
+        isCashTipper: false,
+        purchases: [0,3]
+    }, {
+        id: 1,
+        nameFirst: "Ross",
+        nameLast: "Geller",
+        phone: "",
+        isBillPayer: false,
+        isCashTipper: false,
+        purchases: []
+    }, {
+        id: 2,
+        nameFirst: "Chandler",
+        nameLast: "Bing",
+        phone: "",
+        isBillPayer: false,
+        isCashTipper: false,
+        purchases: [6,7,1]
+    }, {
+        id: 3,
+        nameFirst: "Monica",
+        nameLast: "Geller",
+        phone: "",
+        isBillPayer: false,
+        isCashTipper: false,
+        purchases: [2,8]
+    }, {
+        id: 4,
+        nameFirst: "Phoebe",
+        nameLast: "Buffay",
+        phone: "",
+        isBillPayer: false,
+        isCashTipper: false,
+        purchases: [4]
+    }, {
+        id: 5,
+        nameFirst: "Rachel",
+        nameLast: "Green",
+        phone: "",
+        isBillPayer: false,
+        isCashTipper: false,
+        purchases: [5,6]
+    }
 ];
 
 export default function PurchaseList() {
 
-    const items2 = items.concat(items);
+    const [patrons, setPatrons] = useState(patronsInitialize);
+
+    const findItem = (target) => items.find(item => item.id === target)
 
     return (
         <View style={styles.container}>
+            <View 
+                style={{
+                    backgroundColor:'orange',
+                    height: 100,
+                    width: 60,
+                    flexDirection: 'row',
+                    justifyContent: 'center'
+            }}>
+                {patrons.map(patron => 
+                    <View 
+                        key={patron.id}
+                        style={{
+                        backgroundColor:'blue',
+                        width: 64,
+                    }}>
+                        <Text style={{color:'white'}}>
+                            {patron.nameFirst}
+                        </Text>
+                        {patron.purchases.map(itemId => 
+                            <Text style={{color:'white',fontSize:8,}}>
+                                {findItem(itemId).description}
+                            </Text>
+                        )}
+                    </View>
+                )}
+            </View>
             <FlatList style={styles.listContainer}
                 data={items}
-                renderItem={({item}) => <Purchase item={item}/>}
+                renderItem={({item}) => 
+                    <Purchase 
+                        item={item}
+                        patrons={patrons}
+                        setPatrons={setPatrons}
+                    />
+                }
                 keyExtractor={item => uuid()}
             />
         </View>

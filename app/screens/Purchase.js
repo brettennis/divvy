@@ -5,96 +5,68 @@ import {
     FlatList, 
     TouchableOpacity,
 } from 'react-native';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import 'react-native-get-random-values';
 import { v4 as uuid } from 'uuid';
 
-const patrons = [
-    {
-        nameFirst: "Joey",
-        nameLast: "Tribbiani",
-        phone: "",
-        isBillPayer: false,
-        isCashTipper: false
-    }, {
-        nameFirst: "Ross",
-        nameLast: "Geller",
-        phone: "",
-        isBillPayer: false,
-        isCashTipper: false
-    }, {
-        nameFirst: "Chandler",
-        nameLast: "Bing",
-        phone: "",
-        isBillPayer: false,
-        isCashTipper: false
-    }, {
-        nameFirst: "Monica",
-        nameLast: "Geller",
-        phone: "",
-        isBillPayer: false,
-        isCashTipper: false
-    }, {
-        nameFirst: "Phoebe",
-        nameLast: "Buffay",
-        phone: "",
-        isBillPayer: false,
-        isCashTipper: false
-    }, {
-        nameFirst: "Rachel",
-        nameLast: "Green",
-        phone: "",
-        isBillPayer: false,
-        isCashTipper: false
-    }
-];
-    
-export default function Purchase({ item }) {
+export default function Purchase({ item, patrons, setPatrons }) {
 
-    const [isFlipped, setIsFlipped] = useState(false);
-    const handleFlip = () => setIsFlipped(true);
+    const [isDropdown, setIsDropdown] = useState(false);
+    const handleFlip = () => setIsDropdown(!isDropdown);
 
     const [selectedPatron, setPatron] = useState(null);
 
-    if (!isFlipped) {
-        return (
+    const addPurchase = (itemId, patronId) => {
+        const patronNew = patrons.find(patron => patron.id === patronId);
+        patronNew.purchases.push(itemId);
+        setPatrons(prev => { return { ...prev, patronNew}});
+    }
+
+    const patronList = () => {
+        if (isDropdown) { 
+            return (
+                <View style={styles.buttonContainer}>
+                    {patrons.map(patron => 
+                        <Patron 
+                            key={patron.id}
+                            setPatron={setPatron}
+                            setIsDropdown={setIsDropdown} 
+                            patron={patron}
+                        />
+                    )}
+                </View>
+            )
+        }
+    }
+
+    return (
+        <View>
             <TouchableOpacity 
                 style={styles.purchase}
                 onPress={handleFlip}
             >
-                <View style={styles.itemInformation}>
+                <View style={styles.itemInfoContainer}>
                     <Text style={styles.itemDescription}>{item.description}</Text>
                     <Text style={styles.itemPrice}>{'$'}{item.amount}</Text>
                 </View>
+                {selectedPatron && <View style={styles.itemPatronContainer}>
+                    <Text style={styles.itemPatronText}>
+                        {selectedPatron.nameFirst}{' '}
+                        {selectedPatron.nameLast}
+                    </Text>
+                </View>}
             </TouchableOpacity>
-        );
-    }
-    else {
-        return (
-            <View>
-                <FlatList style={styles.buttonContainer}
-                    data={patrons}
-                    renderItem={({patron}) => 
-                        <Patron 
-                            setPatron={setPatron}
-                            setIsFlipped={setIsFlipped} 
-                            patron={patron}
-                        />
-                    }
-                    keyExtractor={patron => uuid()}
-                    horizontal={true}
-                />
-            </View>
-
-        );
-    }
+            {patronList()}
+        </View>
+    );
+    
 }
 
-export function Patron({ setPatron, setIsFlipped, patron }) {
+function Patron({ setPatron, setIsDropdown, patron }) {
 
     const handleSelectPatron = () => {
-        setPatron(patron);        
-        setIsFlipped(false);
+        setPatron(patron);
+        setIsDropdown(false);
     }
 
     return (
@@ -103,7 +75,7 @@ export function Patron({ setPatron, setIsFlipped, patron }) {
             onPress={handleSelectPatron}
         >
             <Text style={styles.patronName}>
-                Yeah boy
+                {patron.nameFirst} {patron.nameLast[0] + '.'}
             </Text>
         </TouchableOpacity>
     );
@@ -117,8 +89,10 @@ const styles = StyleSheet.create({
         marginTop: 10,
         marginRight: 10,
         marginLeft: 10,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     },
-    itemInformation: {
+    itemInfoContainer: {
         margin: 15,
     },
     itemDescription: {
@@ -129,17 +103,33 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontFamily: 'American Typewriter',
     },
+    itemPatronContainer: {
+        // backgroundColor: 'purple',
+        margin: 15
+    },
+    itemPatronText: {
+        fontFamily: 'Avenir',
+        fontSize: 18,
+    },
     buttonContainer: {
         // backgroundColor: 'white',
-        height: 120,
-        marginTop: 10,
+        paddingTop: 3,
         flex: 1,
+        flexWrap: 'wrap',
+        flexDirection: 'row',
+        justifyContent: 'center',
     },
     patronButton: {
         backgroundColor: 'white',
+        margin: 3,
         borderRadius: 10,
-        width: 80,
-        marginLeft: 5,
-        padding: 5,
+        height: 50,
+        width: 180,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
+    patronName: {
+        fontFamily: 'Avenir',
+        fontSize: 20,
+    }
 })
