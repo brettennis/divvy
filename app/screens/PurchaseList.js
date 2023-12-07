@@ -11,7 +11,9 @@ import { v4 as uuid } from 'uuid';
 
 import Purchase from './Purchase';
 
-const items = [
+const DEV = false;
+
+const TEST_ITEMS = [
 {
     'id' : 0,
     "amount" : 19,
@@ -87,7 +89,7 @@ const items = [
 } 
 ];
 
-const patronsInitialize = [
+const TEST_PATRONS = [
     {
         id: 0,
         nameFirst: "Joey",
@@ -95,7 +97,7 @@ const patronsInitialize = [
         phone: "",
         isBillPayer: false,
         isCashTipper: false,
-        purchases: [0,3]
+        purchases: []
     }, {
         id: 1,
         nameFirst: "Ross",
@@ -111,7 +113,7 @@ const patronsInitialize = [
         phone: "",
         isBillPayer: false,
         isCashTipper: false,
-        purchases: [6,7,1]
+        purchases: []
     }, {
         id: 3,
         nameFirst: "Monica",
@@ -119,7 +121,7 @@ const patronsInitialize = [
         phone: "",
         isBillPayer: false,
         isCashTipper: false,
-        purchases: [2,8]
+        purchases: []
     }, {
         id: 4,
         nameFirst: "Phoebe",
@@ -127,7 +129,7 @@ const patronsInitialize = [
         phone: "",
         isBillPayer: false,
         isCashTipper: false,
-        purchases: [4]
+        purchases: []
     }, {
         id: 5,
         nameFirst: "Rachel",
@@ -135,19 +137,20 @@ const patronsInitialize = [
         phone: "",
         isBillPayer: false,
         isCashTipper: false,
-        purchases: [5,6]
+        purchases: []
     }
 ];
 
 export default function PurchaseList() {
 
-    const [patrons, setPatrons] = useState(patronsInitialize);
+    const items = TEST_ITEMS;
 
+    const [patrons, setPatrons] = useState(TEST_PATRONS);
     const findItem = (target) => items.find(item => item.id === target)
 
     return (
         <View style={styles.container}>
-            <View 
+            {DEV && <View 
                 style={{
                     backgroundColor:'orange',
                     height: 100,
@@ -166,13 +169,15 @@ export default function PurchaseList() {
                             {patron.nameFirst}
                         </Text>
                         {patron.purchases.map(itemId => 
-                            <Text style={{color:'white',fontSize:8,}}>
+                            <Text 
+                                style={{color:'white',fontSize:8,}}
+                                key={itemId}>
                                 {findItem(itemId).description}
                             </Text>
                         )}
                     </View>
                 )}
-            </View>
+            </View>}
             <FlatList style={styles.listContainer}
                 data={items}
                 renderItem={({item}) => 
@@ -182,7 +187,7 @@ export default function PurchaseList() {
                         setPatrons={setPatrons}
                     />
                 }
-                keyExtractor={item => uuid()}
+                keyExtractor={item => item.id}
             />
         </View>
     );

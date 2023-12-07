@@ -2,35 +2,49 @@ import {
     View, 
     Text, 
     StyleSheet, 
-    FlatList, 
     TouchableOpacity,
 } from 'react-native';
 import { useState, useEffect } from 'react';
-import 'react-native-get-random-values';
-import { v4 as uuid } from 'uuid';
 
 export default function Purchase({ item, patrons, setPatrons }) {
 
+    const [selectedPatron, setSelectedPatron] = useState(null); 
     const [isDropdown, setIsDropdown] = useState(false);
-    const handleFlip = () => setIsDropdown(!isDropdown);
 
-    const [selectedPatron, setPatron] = useState(null);
+    const addPurchase = (patronTarget) => {
+        setSelectedPatron(patronTarget);
+        setIsDropdown(false);
 
-    const addPurchase = (itemId, patronId) => {
-        const patronNew = patrons.find(patron => patron.id === patronId);
-        patronNew.purchases.push(itemId);
-        setPatrons(prev => { return { ...prev, patronNew}});
+        // remove purchase from all patron objects, if present
+        let patronsNew = patrons.map(p => {
+            let purchasesNew = [];
+            for (let i = 0; i < p.purchases.length; i++) {
+                if (p.purchases[i] !== item.id) {
+                    purchasesNew.push(p.purchases[i]);
+                }
+            }
+            p.purchases = purchasesNew;
+            return p;
+        }); 
+
+        // add purchase to targeted patron object
+        patronsNew = patronsNew.map(p => {
+            if (p.id === patronTarget.id) {
+                p.purchases.push(item.id);
+            }
+            return p;
+        });
+
+        setPatrons(patronsNew);
     }
 
-    const patronList = () => {
+    function PatronList() {
         if (isDropdown) { 
             return (
                 <View style={styles.buttonContainer}>
                     {patrons.map(patron => 
                         <Patron 
                             key={patron.id}
-                            setPatron={setPatron}
-                            setIsDropdown={setIsDropdown} 
                             patron={patron}
                         />
                     )}
@@ -39,11 +53,24 @@ export default function Purchase({ item, patrons, setPatrons }) {
         }
     }
 
+    function Patron({ patron }) {
+        return (
+            <TouchableOpacity 
+                style={styles.patronButton}
+                onPress={()=>addPurchase(patron)}
+            >
+                <Text style={styles.patronName}>
+                    {patron.nameFirst} {patron.nameLast[0] + '.'}
+                </Text>
+            </TouchableOpacity>
+        );
+    }
+
     return (
         <View>
             <TouchableOpacity 
                 style={styles.purchase}
-                onPress={handleFlip}
+                onPress={() => setIsDropdown(!isDropdown)}
             >
                 <View style={styles.itemInfoContainer}>
                     <Text style={styles.itemDescription}>{item.description}</Text>
@@ -56,29 +83,10 @@ export default function Purchase({ item, patrons, setPatrons }) {
                     </Text>
                 </View>}
             </TouchableOpacity>
-            {patronList()}
+            <PatronList />
         </View>
     );
     
-}
-
-function Patron({ setPatron, setIsDropdown, patron }) {
-
-    const handleSelectPatron = () => {
-        setPatron(patron);
-        setIsDropdown(false);
-    }
-
-    return (
-        <TouchableOpacity 
-            style={styles.patronButton}
-            onPress={handleSelectPatron}
-        >
-            <Text style={styles.patronName}>
-                {patron.nameFirst} {patron.nameLast[0] + '.'}
-            </Text>
-        </TouchableOpacity>
-    );
 }
 
 const styles = StyleSheet.create({
