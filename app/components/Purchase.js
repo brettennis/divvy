@@ -5,8 +5,10 @@ import {
     TouchableOpacity,
 } from 'react-native';
 import { useState, useEffect } from 'react';
+import 'react-native-get-random-values';
+import { v4 as uuid } from 'uuid';
 
-export default function Purchase({ item, patrons, setPatrons }) {
+export default function Purchase({ item, patrons, setPatrons, setShowAddPatronModal }) {
 
     const [selectedPatron, setSelectedPatron] = useState(null); 
     const [isDropdown, setIsDropdown] = useState(false);
@@ -48,22 +50,45 @@ export default function Purchase({ item, patrons, setPatrons }) {
                             patron={patron}
                         />
                     )}
+                    <ButtonAddPatron />
                 </View>
             )
         }
     }
 
     function Patron({ patron }) {
+
+        let name = patron.nameFirst;
+        if (patron.nameLast) {
+            name += ' ' + patron.nameLast[0] + '.';
+        }
+
         return (
             <TouchableOpacity 
                 style={styles.patronButton}
                 onPress={()=>addPurchase(patron)}
             >
                 <Text style={styles.patronName}>
-                    {patron.nameFirst} {patron.nameLast[0] + '.'}
+                    {name}
                 </Text>
             </TouchableOpacity>
         );
+    }
+
+    function ButtonAddPatron() {
+        const handleShowModal = () => {
+            setShowAddPatronModal(true);
+        }
+        return (
+            <TouchableOpacity 
+                style={styles.patronButton}
+                onPress={handleShowModal}
+            >
+                <Text style={styles.patronName}>
+                    Add new patron...
+                </Text>
+            </TouchableOpacity>
+        )
     }
 
     return (
@@ -104,19 +129,16 @@ const styles = StyleSheet.create({
         margin: 15,
     },
     itemDescription: {
-        fontSize: 25,
-        fontFamily: 'Avenir',
+        fontSize: 22,
     },
     itemPrice: {
-        fontSize: 20,
-        fontFamily: 'American Typewriter',
+        fontSize: 18,
     },
     itemPatronContainer: {
         // backgroundColor: 'purple',
         margin: 15
     },
     itemPatronText: {
-        fontFamily: 'Avenir',
         fontSize: 18,
     },
     buttonContainer: {
@@ -128,7 +150,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     patronButton: {
-        backgroundColor: '#ffffff',
+        backgroundColor: theme.white,
         margin: 3,
         borderRadius: 10,
         height: 50,
@@ -137,7 +159,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     patronName: {
-        fontFamily: 'Avenir',
         fontSize: 20,
     }
 })

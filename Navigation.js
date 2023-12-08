@@ -1,10 +1,23 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
 import Home from './app/screens/Home';
 import PurchaseList from './app/screens/PurchaseList';
 import Settings from './app/screens/Settings';
+
 import { MaterialCommunityIcons } from '@expo/vector-icons'; 
 import theme from './app/theme/Constants';
+
+const HomeStack = createNativeStackNavigator();
+
+function HomeStackGroup() {
+    return (
+        <HomeStack.Navigator>
+            <HomeStack.Screen />
+        </HomeStack.Navigator>
+    )
+}
 
 const Tab = createBottomTabNavigator();
 
@@ -22,15 +35,21 @@ function TabGroup() {
                         case 'Settings':  
                             iconName = focused ? 'information' : 'information-outline'; break;
                     }
-                    return <MaterialCommunityIcons name={iconName} size={size} color={color} />
+                    return <MaterialCommunityIcons name={iconName} size={34} color={color} />
                 },
                 tabBarActiveTintColor: theme.purple,
-                tabBarInactiveTintColor: theme.purple,
+                tabBarInactiveTintColor: theme.taupe,
             })}
         >
-            <Tab.Screen name='Home' component={Home}/>
-            <Tab.Screen name='Purchases' component={PurchaseList}/>
-            <Tab.Screen name='Settings' component={Settings}/>
+            <Tab.Screen name='Home' component={Home} 
+                options={{ tabBarShowLabel: false }}
+            />
+            <Tab.Screen name='Purchases' component={PurchaseList}
+                options={{ tabBarShowLabel: false }}
+            />
+            <Tab.Screen name='Settings' component={Settings}
+                options={{ tabBarShowLabel: false }}
+            />
         </Tab.Navigator>
     )
 }

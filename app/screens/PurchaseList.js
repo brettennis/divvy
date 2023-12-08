@@ -4,12 +4,16 @@ import {
     StyleSheet, 
     FlatList, 
     TouchableOpacity,
+    TextInput,
+    Button,
 } from 'react-native';
 import { useState } from 'react';
 import 'react-native-get-random-values';
 import { v4 as uuid } from 'uuid';
+import theme from '../theme/Constants'
 
 import Purchase from '../components/Purchase';
+import AddPatronModal from '../components/AddPatronModal';
 
 const DEV = false;
 
@@ -145,6 +149,8 @@ export default function PurchaseList() {
 
     const items = TEST_ITEMS;
 
+    const [showAddPatronModal, setShowAddPatronModal] = useState(false);
+
     const [patrons, setPatrons] = useState(TEST_PATRONS);
     const findItem = (target) => items.find(item => item.id === target)
 
@@ -152,7 +158,6 @@ export default function PurchaseList() {
         <View style={styles.container}>
             {DEV && <View 
                 style={{
-                    backgroundColor:'orange',
                     height: 100,
                     width: 60,
                     flexDirection: 'row',
@@ -165,12 +170,12 @@ export default function PurchaseList() {
                         backgroundColor:'blue',
                         width: 64,
                     }}>
-                        <Text style={{color:'white'}}>
+                        <Text style={{color:theme.white}}>
                             {patron.nameFirst}
                         </Text>
                         {patron.purchases.map(itemId => 
                             <Text 
-                                style={{color:'white',fontSize:8,}}
+                                style={{color:theme.white,fontSize:8,}}
                                 key={itemId}>
                                 {findItem(itemId).description}
                             </Text>
@@ -178,6 +183,15 @@ export default function PurchaseList() {
                     </View>
                 )}
             </View>}
+            {showAddPatronModal && <AddPatronModal 
+                setPatrons={setPatrons} 
+                setShowAddPatronModal={setShowAddPatronModal}
+            />}
+            <View style={styles.buttonNext}>
+                <Text style={styles.buttonNextText}>
+                    Next
+                </Text>
+            </View>
             <FlatList style={styles.listContainer}
                 data={items}
                 renderItem={({item}) => 
@@ -185,9 +199,15 @@ export default function PurchaseList() {
                         item={item}
                         patrons={patrons}
                         setPatrons={setPatrons}
+                        setShowAddPatronModal={setShowAddPatronModal}
                     />
                 }
                 keyExtractor={item => item.id}
+                ListFooterComponent={
+                    <View style={{
+                        height: 100,
+                    }}/>
+                }
             />
         </View>
     );
@@ -195,12 +215,31 @@ export default function PurchaseList() {
 
 const styles = StyleSheet.create({
     container: {
-        // backgroundColor: 'black',
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
     },
     listContainer: {
         width: '100%',
+    },
+    buttonNext: {
+        backgroundColor: theme.purplelight,
+        borderColor: theme.purple,
+        borderStyle: 'solid',
+        borderWidth: 3,
+        borderRadius: 10,
+        position: 'absolute',
+        width: 100,
+        height: 60,
+        zIndex: 10,
+        bottom: 20,
+        right: 20,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    buttonNextText: {
+        fontWeight: 'bold',
+        color: theme.white,
+        fontSize: 20,
     },
 })
