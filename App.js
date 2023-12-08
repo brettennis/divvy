@@ -1,16 +1,15 @@
 import PurchaseList from './app/screens/PurchaseList';
-import Header from './app/screens/Header';
-import Footer from './app/screens/Footer';
-import { View, Text, SafeAreaView } from 'react-native';
-import { useState } from 'react';
+import 'react-native-gesture-handler';
+import Navigation from './Navigation';
 
 export default function App() {
 
   return (
-    <>
-      <Header />
-      <PurchaseList />
-      <Footer />
-    </>
+    // <>
+    //   <Header />
+    //   <PurchaseList />
+    //   <Footer />
+    // </>
+    <Navigation/>
   );
 }

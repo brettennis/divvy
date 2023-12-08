@@ -91,7 +91,7 @@ export default function Purchase({ item, patrons, setPatrons }) {
 
 const styles = StyleSheet.create({
     purchase: {
-        backgroundColor: 'lightblue',
+        backgroundColor: '#ffffff',
         height: 85,
         borderRadius: 15,
         marginTop: 10,
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     patronButton: {
-        backgroundColor: 'white',
+        backgroundColor: '#ffffff',
         margin: 3,
         borderRadius: 10,
         height: 50,

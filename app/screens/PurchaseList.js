@@ -9,7 +9,7 @@ import { useState } from 'react';
 import 'react-native-get-random-values';
 import { v4 as uuid } from 'uuid';
 
-import Purchase from './Purchase';
+import Purchase from '../components/Purchase';
 
 const DEV = false;
 
@@ -195,7 +195,7 @@ export default function PurchaseList() {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: 'black',
+        // backgroundColor: 'black',
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
