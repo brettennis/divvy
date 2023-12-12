@@ -6,8 +6,10 @@ import {
     TouchableOpacity,
     TextInput,
     Button,
+    Pressable,
 } from 'react-native';
 import { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import 'react-native-get-random-values';
 import { v4 as uuid } from 'uuid';
 import theme from '../theme/Constants'
@@ -154,6 +156,8 @@ export default function PurchaseList() {
     const [patrons, setPatrons] = useState(TEST_PATRONS);
     const findItem = (target) => items.find(item => item.id === target)
 
+    const { navigate } = useNavigation();
+
     return (
         <View style={styles.container}>
             {DEV && <View 
@@ -187,11 +191,14 @@ export default function PurchaseList() {
                 setPatrons={setPatrons} 
                 setShowAddPatronModal={setShowAddPatronModal}
             />}
-            <View style={styles.buttonNext}>
+            <Pressable 
+                style={styles.buttonNext}
+                onPress={() => navigate('Totals', { patrons, items })}
+            >
                 <Text style={styles.buttonNextText}>
                     Next
                 </Text>
-            </View>
+            </Pressable>
             <FlatList style={styles.listContainer}
                 data={items}
                 renderItem={({item}) => 

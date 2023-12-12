@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import Home from './app/screens/Home';
 import PurchaseList from './app/screens/PurchaseList';
+import Totals from './app/screens/Totals';
 import Settings from './app/screens/Settings';
 
 import { MaterialCommunityIcons } from '@expo/vector-icons'; 
@@ -14,7 +15,14 @@ const HomeStack = createNativeStackNavigator();
 function HomeStackGroup() {
     return (
         <HomeStack.Navigator>
-            <HomeStack.Screen />
+            <HomeStack.Screen 
+                name='Purchases'
+                component={PurchaseList}
+            />
+            <HomeStack.Screen 
+                name='Totals'
+                component={Totals}
+            />
         </HomeStack.Navigator>
     )
 }
@@ -29,11 +37,14 @@ function TabGroup() {
                     let iconName;
                     switch (route.name) {
                         case 'Home':      
-                            iconName = focused ? 'home' : 'home-outline'; break;
-                        case 'Purchases': 
-                            iconName = focused ? 'camera' : 'camera-outline'; break;
+                            iconName = focused ? 'home' : 'home-outline'; 
+                            break;
+                        case 'HomeStackGroup': 
+                            iconName = focused ? 'camera' : 'camera-outline'; 
+                            break;
                         case 'Settings':  
-                            iconName = focused ? 'information' : 'information-outline'; break;
+                            iconName = focused ? 'information' : 'information-outline'; 
+                            break;
                     }
                     return <MaterialCommunityIcons name={iconName} size={34} color={color} />
                 },
@@ -44,8 +55,8 @@ function TabGroup() {
             <Tab.Screen name='Home' component={Home} 
                 options={{ tabBarShowLabel: false }}
             />
-            <Tab.Screen name='Purchases' component={PurchaseList}
-                options={{ tabBarShowLabel: false }}
+            <Tab.Screen name='HomeStackGroup' component={HomeStackGroup}
+                options={{ tabBarShowLabel: false, headerShown: false}}
             />
             <Tab.Screen name='Settings' component={Settings}
                 options={{ tabBarShowLabel: false }}
