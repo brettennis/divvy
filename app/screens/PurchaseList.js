@@ -3,12 +3,10 @@ import {
     Text, 
     StyleSheet, 
     FlatList, 
-    TouchableOpacity,
-    TextInput,
-    Button,
+    Alert,
     Pressable,
 } from 'react-native';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import 'react-native-get-random-values';
 import { v4 as uuid } from 'uuid';
@@ -152,11 +150,59 @@ export default function PurchaseList() {
     const items = TEST_ITEMS;
 
     const [showAddPatronModal, setShowAddPatronModal] = useState(false);
+    const [continueDisabled, setContinueDisabled] = useState(true);
 
     const [patrons, setPatrons] = useState(TEST_PATRONS);
     const findItem = (target) => items.find(item => item.id === target)
 
     const { navigate } = useNavigation();
+
+    useEffect(() => {
+        const allocatedItems = Array(items.length).fill(false);
+
+        patrons.forEach(patron => {
+            patron.purchases.forEach(item => {
+                allocatedItems[item] = true;
+            })
+        });
+
+        const isFullyAllocated = allocatedItems.every(item => item);
+        setContinueDisabled(!isFullyAllocated);
+    }, [patrons]);
+
+    function ContinueButton() {
+        const continueAlert = () => {
+            Alert.alert(
+                'Woah there!', 
+                'There are a couple of items that still need to be divvied up.',
+                [ { text: 'OK' } ]
+            );
+        }
+
+        if (continueDisabled) {
+            return (
+                <Pressable 
+                    style={styles.buttonNextDisabled}
+                    onPress={continueAlert}
+                >
+                    <Text style={styles.buttonNextText}>
+                        Next
+                    </Text>
+                </Pressable>
+            )
+        } else {
+            return (
+                <Pressable 
+                    style={styles.buttonNext}
+                    onPress={() => navigate('Totals', { patrons, items })}
+                >
+                    <Text style={styles.buttonNextText}>
+                        Next
+                    </Text>
+                </Pressable>
+            )
+        }
+    }
 
     return (
         <View style={styles.container}>
@@ -191,14 +237,7 @@ export default function PurchaseList() {
                 setPatrons={setPatrons} 
                 setShowAddPatronModal={setShowAddPatronModal}
             />}
-            <Pressable 
-                style={styles.buttonNext}
-                onPress={() => navigate('Totals', { patrons, items })}
-            >
-                <Text style={styles.buttonNextText}>
-                    Next
-                </Text>
-            </Pressable>
+            <ContinueButton />
             <FlatList style={styles.listContainer}
                 data={items}
                 renderItem={({item}) => 
@@ -230,10 +269,7 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     buttonNext: {
-        backgroundColor: theme.purplelight,
-        borderColor: theme.purple,
-        borderStyle: 'solid',
-        borderWidth: 3,
+        backgroundColor: theme.purple,
         borderRadius: 10,
         position: 'absolute',
         width: 100,
@@ -243,6 +279,19 @@ const styles = StyleSheet.create({
         right: 20,
         alignItems: 'center',
         justifyContent: 'center'
+    },
+    buttonNextDisabled: {
+        backgroundColor: theme.black,
+        borderRadius: 10,
+        position: 'absolute',
+        width: 100,
+        height: 60,
+        zIndex: 10,
+        bottom: 20,
+        right: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+        opacity: 0.2,
     },
     buttonNextText: {
         fontWeight: 'bold',
