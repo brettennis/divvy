@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import Home from './app/screens/Home';
-import PurchaseList from './app/screens/PurchaseList';
+import ItemList from './app/screens/ItemList';
 import Totals from './app/screens/Totals';
 import Settings from './app/screens/Settings';
 
@@ -17,7 +17,7 @@ function HomeStackGroup() {
         <HomeStack.Navigator>
             <HomeStack.Screen 
                 name='Purchases'
-                component={PurchaseList}
+                component={ItemList}
             />
             <HomeStack.Screen 
                 name='Totals'

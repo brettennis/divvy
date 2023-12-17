@@ -12,10 +12,10 @@ import 'react-native-get-random-values';
 import { v4 as uuid } from 'uuid';
 import theme from '../theme/Constants'
 
-import Purchase from '../components/Purchase';
+import Item from '../components/Item';
 import AddPatronModal from '../components/AddPatronModal';
 
-const DEV = false;
+const DEV = true;
 
 const TEST_ITEMS = [
 {
@@ -145,14 +145,66 @@ const TEST_PATRONS = [
     }
 ];
 
-export default function PurchaseList() {
+const TEST_PATRONS_1 = [
+    {
+        id: 0,
+        nameFirst: "Joey",
+        nameLast: "Tribbiani",
+        phone: "",
+        isBillPayer: false,
+        isCashTipper: false,
+        purchases: [2]
+    }, {
+        id: 1,
+        nameFirst: "Ross",
+        nameLast: "Geller",
+        phone: "",
+        isBillPayer: false,
+        isCashTipper: false,
+        purchases: [1,4,5]
+    }, {
+        id: 2,
+        nameFirst: "Chandler",
+        nameLast: "Bing",
+        phone: "",
+        isBillPayer: false,
+        isCashTipper: false,
+        purchases: [3]
+    }, {
+        id: 3,
+        nameFirst: "Monica",
+        nameLast: "Geller",
+        phone: "",
+        isBillPayer: false,
+        isCashTipper: false,
+        purchases: []
+    }, {
+        id: 4,
+        nameFirst: "Phoebe",
+        nameLast: "Buffay",
+        phone: "",
+        isBillPayer: false,
+        isCashTipper: false,
+        purchases: [7]
+    }, {
+        id: 5,
+        nameFirst: "Rachel",
+        nameLast: "Green",
+        phone: "",
+        isBillPayer: false,
+        isCashTipper: false,
+        purchases: [6,8]
+    }
+];
+
+export default function ItemList() {
 
     const items = TEST_ITEMS;
 
     const [showAddPatronModal, setShowAddPatronModal] = useState(false);
     const [continueDisabled, setContinueDisabled] = useState(true);
 
-    const [patrons, setPatrons] = useState(TEST_PATRONS);
+    const [patrons, setPatrons] = useState(DEV ? TEST_PATRONS_1 : TEST_PATRONS);
     const findItem = (target) => items.find(item => item.id === target)
 
     const { navigate } = useNavigation();
@@ -179,11 +231,11 @@ export default function PurchaseList() {
             );
         }
 
-        if (continueDisabled) {
+        if (!continueDisabled || DEV) {
             return (
                 <Pressable 
-                    style={styles.buttonNextDisabled}
-                    onPress={continueAlert}
+                    style={styles.buttonNext}
+                    onPress={() => navigate('Totals', { patrons, items })}
                 >
                     <Text style={styles.buttonNextText}>
                         Next
@@ -193,8 +245,8 @@ export default function PurchaseList() {
         } else {
             return (
                 <Pressable 
-                    style={styles.buttonNext}
-                    onPress={() => navigate('Totals', { patrons, items })}
+                    style={styles.buttonNextDisabled}
+                    onPress={continueAlert}
                 >
                     <Text style={styles.buttonNextText}>
                         Next
@@ -241,7 +293,7 @@ export default function PurchaseList() {
             <FlatList style={styles.listContainer}
                 data={items}
                 renderItem={({item}) => 
-                    <Purchase 
+                    <Item 
                         item={item}
                         patrons={patrons}
                         setPatrons={setPatrons}
@@ -250,9 +302,7 @@ export default function PurchaseList() {
                 }
                 keyExtractor={item => item.id}
                 ListFooterComponent={
-                    <View style={{
-                        height: 100,
-                    }}/>
+                    <View style={{ height: 100 }} />
                 }
             />
         </View>

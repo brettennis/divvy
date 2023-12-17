@@ -8,7 +8,7 @@ import { useState, useEffect } from 'react';
 import 'react-native-get-random-values';
 import { v4 as uuid } from 'uuid';
 
-export default function Purchase({ item, patrons, setPatrons, setShowAddPatronModal }) {
+export default function Item({ item, patrons, setPatrons, setShowAddPatronModal }) {
 
     const [selectedPatron, setSelectedPatron] = useState(null); 
     const [isDropdown, setIsDropdown] = useState(false);
