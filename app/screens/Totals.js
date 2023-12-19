@@ -10,7 +10,7 @@ import { useRoute } from '@react-navigation/native';
 
 import PatronTotals from '../components/PatronTotals';
 
-const DEV = true;
+const DEV = false;
 
 export default function Totals() {
 
@@ -50,9 +50,14 @@ export default function Totals() {
             <FlatList
                 style={styles.patronList}
                 data={patrons}
-                renderItem={({ item }) =>
-                    <PatronTotals patron={item} items={items}/>
-                }
+                renderItem={({ item, index }) => {
+                    if (item.purchases.length > 0) {
+                        return (<>
+                            {(index !== 0) && <View style={styles.patronBorder}/>}
+                            <PatronTotals patron={item} items={items}/>
+                        </>)
+                    }
+                }}
                 keyExtractor={item => item.id}
             />
         </View>
@@ -67,4 +72,11 @@ const styles = StyleSheet.create({
     patronList: {
 
     },
+    patronBorder: {
+        backgroundColor: theme.taupe,
+        height: 1,
+        marginLeft: 15,
+        marginRight: 15,
+        borderRadius: '100%',
+    }
 });

@@ -1,21 +1,18 @@
 import { 
     View, 
     Text, 
-    StyleSheet, 
+    StyleSheet,
+    Pressable, 
 } from 'react-native';
 import { useState } from 'react';
+import { Ionicons } from '@expo/vector-icons'; 
 import theme from '../theme/Constants'
-import { useRoute } from '@react-navigation/native';
 
 export default function PatronTotals({ patron, items }) {
 
     const findItem = (target) => items.find(item => item.id === target);
     const [isDropdown, setIsDropdown] = useState(false);
 
-    // let name = patron.nameFirst;
-    // if (patron.nameLast) {
-    //     name += ' ' + patron.nameLast[0] + '.';
-    // }
     let name = patron.nameFirst + ' ' + patron.nameLast;
 
     let totalOwed = patron.purchases.reduce((currentTotal, itemId) => {
@@ -30,24 +27,41 @@ export default function PatronTotals({ patron, items }) {
                     {item.description}
                 </Text>
                 <Text style={styles.purchasePrice}>
-                    {item.amount}
+                    + ${item.amount}
                 </Text>
             </View>
         )
     }
 
     return (
-        <View style={styles.containerPatron}>
+        <Pressable 
+            style={styles.containerPatron}
+            onPress={() => setIsDropdown(!isDropdown)}
+        >
             <View style={styles.patronInformation}>
-                <Text style={styles.patronName}> {name} </Text>
+                <View style={styles.patronInformationLeft}> 
+                    {isDropdown ?
+                        <Ionicons name="ios-caret-down"    size={21} color="black" /> :
+                        <Ionicons name="ios-caret-forward" size={21} color="black" />
+                    }  
+                    <Text style={styles.patronName}> {name} </Text>
+                </View>
                 <Text style={styles.patronOwed}> ${totalOwed} </Text>
             </View>
-            <View style={styles.containerDropdown}>
+            {isDropdown && <View style={styles.containerDropdown}>
                 {patron.purchases.map(itemId => 
                     <Purchase key={itemId} itemId={itemId} />
                 )}
-            </View>
-        </View>
+                <View style={styles.containerPurchase}>
+                    <Text style={styles.purchaseDescription}>
+                        Tax (7%)
+                    </Text>
+                    <Text style={styles.purchasePrice}>
+                        + $4.20
+                    </Text>
+                </View>
+            </View>}
+        </Pressable>
     )
 }
 
@@ -57,13 +71,19 @@ const styles = StyleSheet.create({
         height: '100%',
     },
     containerPatron: {
-        height: 85,
-        marginTop: 10,
-        // padding: 15,
+        marginTop: 20,
+        marginBottom: 20,
+        marginLeft: 10,
+        marginRight: 10,
     },
     patronInformation: {
+        height: 35,
         flexDirection: 'row',
         justifyContent: 'space-between',
+    },
+    patronInformationLeft: {
+        flexDirection: 'row',
+        alignItems: 'center',
     },
     patronName: {
         fontSize: 23,
@@ -72,17 +92,20 @@ const styles = StyleSheet.create({
         fontSize: 23,
     },
     containerDropdown: {
-        padding: 10,
+        flex: 1,
     },
     containerPurchase: {
-        height: 30,
+        height: 33,
+        marginLeft: 10,
+        marginRight: 5,
         flexDirection: 'row',
         justifyContent: 'space-between',
+        alignItems: 'center',
     },
     purchaseDescription: {
-        fontSize: 20,
+        fontSize: 19,
     },
     purchasePrice: {
-        fontSize: 20,
-    }
+        fontSize: 19,
+    },
 });
