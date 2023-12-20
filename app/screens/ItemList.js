@@ -131,7 +131,7 @@ const TEST_PATRONS = [
         nameFirst: "Phoebe",
         nameLast: "Buffay",
         phone: "",
-        isBillPayer: false,
+        isBillPayer: true,
         isCashTipper: false,
         purchases: []
     }, {
@@ -183,7 +183,7 @@ const TEST_PATRONS_1 = [
         nameFirst: "Phoebe",
         nameLast: "Buffay",
         phone: "",
-        isBillPayer: false,
+        isBillPayer: true,
         isCashTipper: false,
         purchases: [7]
     }, {

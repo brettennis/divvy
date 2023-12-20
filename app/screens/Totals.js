@@ -18,7 +18,9 @@ export default function Totals() {
     const patrons = params.patrons;
     const items = params.items;
 
-    const findItem = (target) => items.find(item => item.id === target)
+    const findItem = (target) => items.find(item => item.id === target);
+
+    const billPayer = patrons.find(patron => patron.isBillPayer);
 
     return (
         <View style={styles.container}>
@@ -51,14 +53,19 @@ export default function Totals() {
                 style={styles.patronList}
                 data={patrons}
                 renderItem={({ item, index }) => {
-                    if (item.purchases.length > 0) {
+                    if (item.purchases.length > 0 && !item.isBillPayer) {
                         return (<>
-                            {(index !== 0) && <View style={styles.patronBorder}/>}
-                            <PatronTotals patron={item} items={items}/>
+                            <PatronTotals patron={item} items={items} billPayer={billPayer}/>
+                            <View style={styles.patronBorder}/>
                         </>)
                     }
                 }}
                 keyExtractor={item => item.id}
+                ListFooterComponent={
+                    <View style={styles.containerTotals}>
+                        <PatronTotals patron={billPayer} items={items} billPayer={billPayer}/>
+                    </View>
+                }
             />
         </View>
     )
@@ -78,5 +85,8 @@ const styles = StyleSheet.create({
         marginLeft: 15,
         marginRight: 15,
         borderRadius: '100%',
+    },
+    containerTotals: {
+
     }
 });
