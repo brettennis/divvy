@@ -6,18 +6,27 @@ import {
 } from 'react-native';
 import { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons'; 
-import theme from '../theme/Constants'
 
-export default function PatronTotals({ patron, items, billPayer }) {
+export default function PatronTotals({ patron, items, billPayer, tip }) {
 
     const findItem = (target) => items.find(item => item.id === target);
     const [isDropdown, setIsDropdown] = useState(false);
 
     let name = patron.nameFirst + ' ' + patron.nameLast;
 
+    let taxRate = 7;
+
     let totalOwed = patron.purchases.reduce((currentTotal, itemId) => {
         return findItem(itemId).amount + currentTotal;
     }, 0);
+
+    let tax = (totalOwed * (taxRate * 0.01)).toFixed(2);
+
+    let totalOwedPlusTax = Number(totalOwed) + Number(tax);
+
+    let patronTip = (totalOwedPlusTax * (tip * 0.01)).toFixed(2);
+
+    let totalOwedPlusTip = (totalOwedPlusTax + Number(patronTip)).toFixed(2);
 
     function Dropdown() {
         if (isDropdown) {
@@ -28,10 +37,27 @@ export default function PatronTotals({ patron, items, billPayer }) {
                     )}
                     <View style={styles.containerPurchase}>
                         <Text style={styles.purchaseDescription}>
-                            Tax (7%)
+                            Tax ({taxRate}%)
                         </Text>
                         <Text style={styles.purchasePrice}>
-                            + $4.20
+                            + ${tax}
+                        </Text>
+                    </View>
+                    <View style={styles.totalLine}/>
+                    <View style={styles.containerPurchase}>
+                        <Text style={styles.purchaseDescription}>
+                            Total before tip
+                        </Text>
+                        <Text style={styles.purchasePrice}>
+                            + ${totalOwedPlusTax}
+                        </Text>
+                    </View>
+                    <View style={styles.containerPurchase}>
+                        <Text style={styles.purchaseDescription}>
+                            Tip
+                        </Text>
+                        <Text style={styles.purchasePrice}>
+                            + ${patronTip}
                         </Text>
                     </View>
                     <View style={styles.totalLine}/>
@@ -40,7 +66,7 @@ export default function PatronTotals({ patron, items, billPayer }) {
                             Total
                         </Text>
                         <Text style={styles.patronOwed}> 
-                            ${totalOwed} 
+                            ${totalOwedPlusTip} 
                         </Text>
                     </View>
                 </View>
@@ -64,7 +90,7 @@ export default function PatronTotals({ patron, items, billPayer }) {
 
     return (
         <Pressable 
-            style={styles.containerPatron}
+            style={styles.container}
             onPress={() => setIsDropdown(!isDropdown)}
         >
             <View style={styles.patronInformation}>
@@ -80,7 +106,7 @@ export default function PatronTotals({ patron, items, billPayer }) {
                         {patron.id !== billPayer.id &&
                             <Text style={styles.patronOwes}> owes {billPayer.nameFirst} </Text>
                         }
-                        <Text style={styles.patronOwed}> ${totalOwed} </Text>
+                        <Text style={styles.patronOwed}> ${totalOwedPlusTip} </Text>
                     </View>
                 }
             </View>
@@ -91,14 +117,11 @@ export default function PatronTotals({ patron, items, billPayer }) {
 
 const styles = StyleSheet.create({
     container: {
-        width: '100%',
-        height: '100%',
-    },
-    containerPatron: {
-        marginTop: 20,
-        marginBottom: 20,
+        paddingTop: 20,
+        paddingBottom: 20,
         marginLeft: 10,
         marginRight: 10,
+        backgroundImage: 'linearGradient(red, yellow)',
     },
     patronInformation: {
         height: 35,
@@ -117,7 +140,8 @@ const styles = StyleSheet.create({
         fontSize: 23,
     },
     patronOwed: {
-        fontSize: 23,
+        fontSize: 21,
+        fontWeight: 'bold',
     },
     patronOwes: {
         fontSize: 15,
@@ -127,7 +151,7 @@ const styles = StyleSheet.create({
     },
     containerPurchase: {
         height: 33,
-        marginLeft: 40,
+        marginLeft: 10,
         marginRight: 5,
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -142,7 +166,7 @@ const styles = StyleSheet.create({
     totalLine: {
         backgroundColor: theme.taupe,
         height: 1,
-        marginLeft: 280,
+        marginLeft: 20,
         marginRight: 5,
         borderRadius: '100%',
     }

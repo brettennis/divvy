@@ -8,6 +8,7 @@ import { useState } from 'react';
 import theme from '../theme/Constants'
 import { useRoute } from '@react-navigation/native';
 
+import TipSlider from '../components/TipSlider';
 import PatronTotals from '../components/PatronTotals';
 
 const DEV = false;
@@ -18,8 +19,9 @@ export default function Totals() {
     const patrons = params.patrons;
     const items = params.items;
 
-    const findItem = (target) => items.find(item => item.id === target);
+    const [ tip, setTip ] = useState(20);
 
+    const findItem = (target) => items.find(item => item.id === target);
     const billPayer = patrons.find(patron => patron.isBillPayer);
 
     return (
@@ -52,19 +54,30 @@ export default function Totals() {
             <FlatList
                 style={styles.patronList}
                 data={patrons}
-                renderItem={({ item, index }) => {
+                renderItem={({ item }) => {
                     if (item.purchases.length > 0 && !item.isBillPayer) {
                         return (<>
-                            <PatronTotals patron={item} items={items} billPayer={billPayer}/>
+                            <PatronTotals 
+                                patron={item} 
+                                items={items} 
+                                billPayer={billPayer}
+                                tip={tip}
+                            />
                             <View style={styles.patronBorder}/>
                         </>)
                     }
                 }}
                 keyExtractor={item => item.id}
+                ListHeaderComponent={
+                    <TipSlider tip={tip} setTip={setTip} />
+                }
                 ListFooterComponent={
-                    <View style={styles.containerTotals}>
-                        <PatronTotals patron={billPayer} items={items} billPayer={billPayer}/>
-                    </View>
+                    <PatronTotals 
+                        patron={billPayer} 
+                        items={items} 
+                        billPayer={billPayer}
+                        tip={tip}
+                    />
                 }
             />
         </View>
@@ -82,8 +95,8 @@ const styles = StyleSheet.create({
     patronBorder: {
         backgroundColor: theme.taupe,
         height: 1,
-        marginLeft: 15,
-        marginRight: 15,
+        marginLeft: 10,
+        marginRight: 10,
         borderRadius: '100%',
     },
     containerTotals: {
