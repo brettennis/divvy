@@ -4,7 +4,7 @@ import {
     StyleSheet, 
     FlatList
 } from 'react-native';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import theme from '../theme/Constants'
 import { useRoute } from '@react-navigation/native';
 
@@ -19,10 +19,51 @@ export default function Totals() {
     const patrons = params.patrons;
     const items = params.items;
 
+    const round = value => Math.round(value * 100) / 100;
+    const disp  = value => (value / 100).toFixed(2)
+    const findItem = (target) => items.find(item => item.id === target);
+    const billPayer = patrons.find(p => p.isBillPayer);
+
     const [ tip, setTip ] = useState(20);
 
-    const findItem = (target) => items.find(item => item.id === target);
-    const billPayer = patrons.find(patron => patron.isBillPayer);
+    let taxRate = 7;
+
+    patrons.forEach(p => {
+        p.totalOwed = p.purchases.reduce((curr, itemId) => {
+            return (findItem(itemId).amount * 100) + curr;
+        }, 0);
+        p.taxOwed =             p.totalOwed * (taxRate * 0.01);
+        p.totalOwedPlusTax =    p.totalOwed + p.taxOwed;
+        p.tipOwed =             p.totalOwedPlusTax * (tip * 0.01);
+        p.totalOwedPlusTip =    p.totalOwedPlusTax + p.tipOwed;
+        p.totalOwedRounded =    Math.ceil(p.totalOwedPlusTip / 100) * 100;
+    });
+
+    let totalPreTip = disp(patrons.reduce((accum, p) => {
+        return p.totalOwedPlusTax + accum;
+    }, 0));
+    let totalTipAmount = disp(patrons.reduce((accum, p) => {
+        return p.tipOwed + accum;
+    }, 0));
+    let totalPostTip = disp(patrons.reduce((accum, p) => {
+        return p.totalOwedPlusTip + accum;
+    }, 0));
+
+    function Summary() {
+        return (
+            <View style={styles.summary.container}>
+                <Text style={styles.summary.text}>
+                    The purchases add up to ${totalPreTip}.
+                </Text>
+                <Text style={styles.summary.text}>
+                    {billPayer.nameFirst} pays ${totalTipAmount} on the tip line,
+                </Text>
+                <Text style={styles.summary.text}>
+                    for a total of ${totalPostTip}.
+                </Text>
+            </View>
+        )
+    }
 
     return (
         <View style={styles.container}>
@@ -61,9 +102,9 @@ export default function Totals() {
                                 patron={item} 
                                 items={items} 
                                 billPayer={billPayer}
-                                tip={tip}
+                                taxRate={taxRate}
                             />
-                            <View style={styles.patronBorder}/>
+                            {/* <View style={styles.line}/> */}
                         </>)
                     }
                 }}
@@ -71,14 +112,15 @@ export default function Totals() {
                 ListHeaderComponent={
                     <TipSlider tip={tip} setTip={setTip} />
                 }
-                ListFooterComponent={
+                ListFooterComponent={<>
                     <PatronTotals 
                         patron={billPayer} 
                         items={items} 
                         billPayer={billPayer}
-                        tip={tip}
+                        taxRate={taxRate}
                     />
-                }
+                    <Summary />
+                </>}
             />
         </View>
     )
@@ -89,17 +131,20 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
     },
-    patronList: {
-
-    },
-    patronBorder: {
-        backgroundColor: theme.taupe,
+    line: {
+        backgroundColor: theme.black,
         height: 1,
         marginLeft: 10,
         marginRight: 10,
         borderRadius: '100%',
     },
-    containerTotals: {
-
+    summary: {
+        container: {
+            backgroundColor: theme.mintlight,
+            padding: 20,
+        },
+        text: {
+            fontSize: 20,
+        }
     }
 });

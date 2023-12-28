@@ -7,26 +7,26 @@ import {
 import { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons'; 
 
-export default function PatronTotals({ patron, items, billPayer, tip }) {
+export default function PatronTotals({ patron, items, billPayer, taxRate }) {
 
+    const disp = value => (value / 100).toFixed(2)
     const findItem = (target) => items.find(item => item.id === target);
     const [isDropdown, setIsDropdown] = useState(false);
 
-    let name = patron.nameFirst + ' ' + patron.nameLast;
+    const name = patron.nameFirst + ' ' + patron.nameLast;
 
-    let taxRate = 7;
+    const owesText = 
+        patron.id !== billPayer.id ? 
+        'owes ' + billPayer.nameFirst : 
+        'spent' ;
 
-    let totalOwed = patron.purchases.reduce((currentTotal, itemId) => {
-        return findItem(itemId).amount + currentTotal;
-    }, 0);
-
-    let tax = (totalOwed * (taxRate * 0.01)).toFixed(2);
-
-    let totalOwedPlusTax = Number(totalOwed) + Number(tax);
-
-    let patronTip = (totalOwedPlusTax * (tip * 0.01)).toFixed(2);
-
-    let totalOwedPlusTip = (totalOwedPlusTax + Number(patronTip)).toFixed(2);
+    const { 
+        taxOwed,
+        totalOwedPlusTax,
+        tipOwed,
+        totalOwedPlusTip,
+        totalOwedRounded,
+    } = patron;
 
     function Dropdown() {
         if (isDropdown) {
@@ -40,7 +40,7 @@ export default function PatronTotals({ patron, items, billPayer, tip }) {
                             Tax ({taxRate}%)
                         </Text>
                         <Text style={styles.purchasePrice}>
-                            + ${tax}
+                            + ${disp(taxOwed)}
                         </Text>
                     </View>
                     <View style={styles.totalLine}/>
@@ -49,7 +49,7 @@ export default function PatronTotals({ patron, items, billPayer, tip }) {
                             Total before tip
                         </Text>
                         <Text style={styles.purchasePrice}>
-                            + ${totalOwedPlusTax}
+                            + ${disp(totalOwedPlusTax)}
                         </Text>
                     </View>
                     <View style={styles.containerPurchase}>
@@ -57,7 +57,7 @@ export default function PatronTotals({ patron, items, billPayer, tip }) {
                             Tip
                         </Text>
                         <Text style={styles.purchasePrice}>
-                            + ${patronTip}
+                            + ${disp(tipOwed)}
                         </Text>
                     </View>
                     <View style={styles.totalLine}/>
@@ -66,7 +66,7 @@ export default function PatronTotals({ patron, items, billPayer, tip }) {
                             Total
                         </Text>
                         <Text style={styles.patronOwed}> 
-                            ${totalOwedPlusTip} 
+                            ${disp(totalOwedPlusTip)} 
                         </Text>
                     </View>
                 </View>
@@ -103,10 +103,8 @@ export default function PatronTotals({ patron, items, billPayer, tip }) {
                 </View>
                 {!isDropdown &&
                     <View style={styles.patronInformationRight}> 
-                        {patron.id !== billPayer.id &&
-                            <Text style={styles.patronOwes}> owes {billPayer.nameFirst} </Text>
-                        }
-                        <Text style={styles.patronOwed}> ${totalOwedPlusTip} </Text>
+                        <Text style={styles.owesText}> {owesText} </Text>
+                        <Text style={styles.patronOwed}> ${totalOwedRounded / 100} </Text>
                     </View>
                 }
             </View>
@@ -143,7 +141,7 @@ const styles = StyleSheet.create({
         fontSize: 21,
         fontWeight: 'bold',
     },
-    patronOwes: {
+    owesText: {
         fontSize: 15,
     },
     containerDropdown: {
@@ -166,7 +164,7 @@ const styles = StyleSheet.create({
     totalLine: {
         backgroundColor: theme.taupe,
         height: 1,
-        marginLeft: 20,
+        marginLeft: 10,
         marginRight: 5,
         borderRadius: '100%',
     }
