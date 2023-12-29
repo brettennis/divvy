@@ -11,8 +11,6 @@ import { useRoute } from '@react-navigation/native';
 import TipSlider from '../components/TipSlider';
 import PatronTotals from '../components/PatronTotals';
 
-const DEV = false;
-
 export default function Totals() {
 
     const { params } = useRoute();
@@ -53,13 +51,19 @@ export default function Totals() {
         return (
             <View style={styles.summary.container}>
                 <Text style={styles.summary.text}>
-                    The purchases add up to ${totalPreTip}.
+                    The purchases add up to
+                    <Text style={styles.summary.bold}> ${totalPreTip}</Text>
+                    .
                 </Text>
                 <Text style={styles.summary.text}>
-                    {billPayer.nameFirst} pays ${totalTipAmount} on the tip line,
+                    {billPayer.nameFirst} writes 
+                    <Text style={styles.summary.bold}> ${totalTipAmount} </Text> 
+                    on the tip line,
                 </Text>
                 <Text style={styles.summary.text}>
-                    for a total of ${totalPostTip}.
+                    for a total of 
+                    <Text style={styles.summary.bold}> ${totalPostTip}</Text>
+                    .
                 </Text>
             </View>
         )
@@ -67,31 +71,6 @@ export default function Totals() {
 
     return (
         <View style={styles.container}>
-            {DEV && <View 
-                    style={{
-                        height: 100,
-                        flexDirection: 'row',
-                }}>
-                    {patrons.map(patron => 
-                        <View 
-                            key={patron.id}
-                            style={{
-                            backgroundColor:'blue',
-                            width: 64,
-                        }}>
-                            <Text style={{color:theme.white}}>
-                                {patron.nameFirst}
-                            </Text>
-                            {patron.purchases.map(itemId => 
-                                <Text 
-                                    style={{color:theme.white,fontSize:8,}}
-                                    key={itemId}>
-                                    {findItem(itemId).description}
-                                </Text>
-                            )}
-                        </View>
-                    )}
-            </View>}
             <FlatList
                 style={styles.patronList}
                 data={patrons}
@@ -144,6 +123,10 @@ const styles = StyleSheet.create({
             padding: 20,
         },
         text: {
+            fontSize: 20,
+        },
+        bold: {
+            fontWeight: 'bold',
             fontSize: 20,
         }
     }

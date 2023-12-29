@@ -96,8 +96,8 @@ export default function PatronTotals({ patron, items, billPayer, taxRate }) {
             <View style={styles.patronInformation}>
                 <View style={styles.patronInformationLeft}> 
                     {isDropdown ?
-                        <Ionicons name="ios-caret-down"    size={21} color="black" /> :
-                        <Ionicons name="ios-caret-forward" size={21} color="black" />
+                        <Ionicons name="ios-caret-down"    size={21} color={theme.black} /> :
+                        <Ionicons name="ios-caret-forward" size={21} color={theme.black} />
                     }  
                     <Text style={styles.patronName}> {name} </Text>
                 </View>
@@ -149,6 +149,7 @@ const styles = StyleSheet.create({
     },
     containerPurchase: {
         height: 33,
+        marginTop: 3,
         marginLeft: 10,
         marginRight: 5,
         flexDirection: 'row',
@@ -166,6 +167,8 @@ const styles = StyleSheet.create({
         height: 1,
         marginLeft: 10,
         marginRight: 5,
+        marginTop: 5,
+        marginBottom: 5,
         borderRadius: '100%',
     }
 });
