@@ -14,6 +14,7 @@ import theme from '../theme/Constants'
 
 import Item from '../components/Item';
 import AddPatronModal from '../components/AddPatronModal';
+import Button from '../components/Button';
 
 const DEV = true;
 
@@ -202,7 +203,7 @@ export default function ItemList() {
     const items = TEST_ITEMS;
 
     const [showAddPatronModal, setShowAddPatronModal] = useState(false);
-    const [continueDisabled, setContinueDisabled] = useState(true);
+    const [continueDisabled, setContinueDisabled] = useState(!DEV);
 
     const [patrons, setPatrons] = useState(DEV ? TEST_PATRONS_1 : TEST_PATRONS);
     const findItem = (target) => items.find(item => item.id === target)
@@ -219,7 +220,8 @@ export default function ItemList() {
         });
 
         const isFullyAllocated = allocatedItems.every(item => item);
-        setContinueDisabled(!isFullyAllocated);
+
+        if (!DEV) setContinueDisabled(!isFullyAllocated);
     }, [patrons]);
 
     function ContinueButton() {
@@ -231,60 +233,23 @@ export default function ItemList() {
             );
         }
 
-        if (!continueDisabled || DEV) {
-            return (
-                <Pressable 
-                    style={styles.buttonNext}
-                    onPress={() => navigate('Totals', { patrons, items })}
-                >
-                    <Text style={styles.buttonNextText}>
-                        Next
-                    </Text>
-                </Pressable>
-            )
-        } else {
-            return (
-                <Pressable 
-                    style={styles.buttonNextDisabled}
-                    onPress={continueAlert}
-                >
-                    <Text style={styles.buttonNextText}>
-                        Next
-                    </Text>
-                </Pressable>
-            )
-        }
+        const callback = 
+            continueDisabled ? 
+            continueAlert :
+            () => navigate('Totals', { patrons, items });
+        
+        return (
+            <Button 
+                newStyle={styles.button}
+                onPress={callback}
+                disabled={continueDisabled}
+                text={'Next'}
+            />
+        )
     }
 
     return (
         <View style={styles.container}>
-            {DEV && <View 
-                style={{
-                    height: 100,
-                    width: 60,
-                    flexDirection: 'row',
-                    justifyContent: 'center'
-            }}>
-                {patrons.map(patron => 
-                    <View 
-                        key={patron.id}
-                        style={{
-                        backgroundColor:'blue',
-                        width: 64,
-                    }}>
-                        <Text style={{color:theme.white}}>
-                            {patron.nameFirst}
-                        </Text>
-                        {patron.purchases.map(itemId => 
-                            <Text 
-                                style={{color:theme.white,fontSize:8,}}
-                                key={itemId}>
-                                {findItem(itemId).description}
-                            </Text>
-                        )}
-                    </View>
-                )}
-            </View>}
             {showAddPatronModal && <AddPatronModal 
                 setPatrons={setPatrons} 
                 setShowAddPatronModal={setShowAddPatronModal}
@@ -318,34 +283,11 @@ const styles = StyleSheet.create({
     listContainer: {
         width: '100%',
     },
-    buttonNext: {
-        backgroundColor: theme.purple,
-        borderRadius: 10,
+    button: {
         position: 'absolute',
         width: 100,
         height: 60,
-        zIndex: 10,
         bottom: 20,
         right: 20,
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    buttonNextDisabled: {
-        backgroundColor: theme.black,
-        borderRadius: 10,
-        position: 'absolute',
-        width: 100,
-        height: 60,
-        zIndex: 10,
-        bottom: 20,
-        right: 20,
-        alignItems: 'center',
-        justifyContent: 'center',
-        opacity: 0.2,
-    },
-    buttonNextText: {
-        fontWeight: 'bold',
-        color: theme.white,
-        fontSize: 20,
-    },
+    }
 })

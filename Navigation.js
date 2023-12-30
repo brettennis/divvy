@@ -6,6 +6,7 @@ import Home from './app/screens/Home';
 import ItemList from './app/screens/ItemList';
 import Totals from './app/screens/Totals';
 import Settings from './app/screens/Settings';
+import Login from './app/screens/Login';
 
 import { MaterialCommunityIcons } from '@expo/vector-icons'; 
 import theme from './app/theme/Constants';
@@ -16,14 +17,31 @@ function HomeStackGroup() {
     return (
         <HomeStack.Navigator>
             <HomeStack.Screen 
+                name='Home'
+                component={Home}
+            />
+            <HomeStack.Screen 
+                name='Login'
+                component={Login}
+            />
+        </HomeStack.Navigator>
+    )
+}
+
+const MainStack = createNativeStackNavigator();
+
+function MainStackGroup() {
+    return (
+        <MainStack.Navigator>
+            <MainStack.Screen 
                 name='Purchases'
                 component={ItemList}
             />
-            <HomeStack.Screen 
+            <MainStack.Screen 
                 name='Totals'
                 component={Totals}
             />
-        </HomeStack.Navigator>
+        </MainStack.Navigator>
     )
 }
 
@@ -36,10 +54,10 @@ function TabGroup() {
                 tabBarIcon: ({ focused, color, size }) => {
                     let iconName;
                     switch (route.name) {
-                        case 'Home':      
+                        case 'HomeStackGroup':      
                             iconName = focused ? 'home' : 'home-outline'; 
                             break;
-                        case 'HomeStackGroup': 
+                        case 'MainStackGroup': 
                             iconName = focused ? 'camera' : 'camera-outline'; 
                             break;
                         case 'Settings':  
@@ -52,11 +70,11 @@ function TabGroup() {
                 tabBarInactiveTintColor: theme.taupe,
             })}
         >
-            <Tab.Screen name='Home' component={Home} 
-                options={{ tabBarShowLabel: false }}
+            <Tab.Screen name='HomeStackGroup' component={HomeStackGroup} 
+                options={{ tabBarShowLabel: false, headerShown: false }}
             />
-            <Tab.Screen name='HomeStackGroup' component={HomeStackGroup}
-                options={{ tabBarShowLabel: false, headerShown: false}}
+            <Tab.Screen name='MainStackGroup' component={MainStackGroup}
+                options={{ tabBarShowLabel: false, headerShown: false }}
             />
             <Tab.Screen name='Settings' component={Settings}
                 options={{ tabBarShowLabel: false }}

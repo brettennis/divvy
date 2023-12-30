@@ -95,6 +95,7 @@ export default function Totals() {
                         taxRate={taxRate}
                     />
                     <Summary />
+                    
                 </>}
             />
         </View>
