@@ -4,7 +4,6 @@ import {
     Switch,
     StyleSheet,
 } from 'react-native';
-import { useState } from 'react';
 
 export default function SwitchRow({ state, setState, description, label }) {
 

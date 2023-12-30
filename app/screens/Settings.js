@@ -1,9 +1,6 @@
 import { 
     ScrollView,
     View, 
-    Text,
-    TextInput,
-    Switch,
     StyleSheet,
 } from 'react-native';
 import { useState } from 'react';
@@ -19,10 +16,6 @@ export default function Settings() {
     const [ isRoundedOwed, setIsRoundedOwed ] = useState(true);
     const [ isRoundedTip,  setIsRoundedTip  ] = useState(false);
 
-    const displayValidAlert = (description) => {
-
-    }
-
     return (
         <ScrollView 
             style={styles.container}
@@ -33,12 +26,13 @@ export default function Settings() {
                 state={defaultTaxRate}
                 setState={setDefaultTaxRate}
             />
+            <View style={styles.line} />
             <InputRow 
                 format={'tip'}
                 state={defaultTipPercent}
                 setState={setDefaultTipPercent}
             />
-
+            <View style={styles.line} />
             <SwitchRow 
                 label={'Round up owed amounts'}
                 description={'This rounds up the amount each patron owes to the bill payer to the nearest dollar.'}
@@ -52,9 +46,6 @@ export default function Settings() {
                 state={isRoundedTip}
                 setState={setIsRoundedTip}
             />
-
-            <Text style={styles.text}>Made by Brett Ennis</Text>
-
         </ScrollView>
     );
 }

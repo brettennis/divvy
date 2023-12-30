@@ -83,7 +83,6 @@ export default function InputRow({ state, setState, format }) {
                 {description}
             </Text> }
             { alertMessage && <ValidAlert message={alertMessage} /> }
-            <View style={styles.line} />
         </View>
     )
 }
@@ -128,10 +127,5 @@ const styles = StyleSheet.create({
             fontSize: 20,
             borderColor: theme.taupe,
         }
-    },
-    line: {
-        height: 1,
-        borderRadius: 3,
-        backgroundColor: theme.taupe,
     },
 });
