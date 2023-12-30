@@ -50,21 +50,18 @@ export default function Totals() {
     function Summary() {
         return (
             <View style={styles.summary.container}>
-                <Text style={styles.summary.text}>
-                    The purchases add up to
-                    <Text style={styles.summary.bold}> ${totalPreTip}</Text>
-                    .
-                </Text>
-                <Text style={styles.summary.text}>
-                    {billPayer.nameFirst} writes 
-                    <Text style={styles.summary.bold}> ${totalTipAmount} </Text> 
-                    on the tip line,
-                </Text>
-                <Text style={styles.summary.text}>
-                    for a total of 
-                    <Text style={styles.summary.bold}> ${totalPostTip}</Text>
-                    .
-                </Text>
+                <View style={styles.summary.row}>
+                    <Text style={styles.summary.text}>Total before tip</Text>
+                    <Text style={styles.summary.bold}>${totalPreTip}</Text>
+                </View>
+                <View style={styles.summary.row}>
+                    <Text style={styles.summary.text}>Tip</Text>
+                    <Text style={styles.summary.bold}>${totalTipAmount}</Text>
+                </View>
+                <View style={styles.summary.row}>
+                    <Text style={styles.summary.text}>Total</Text>
+                    <Text style={styles.summary.bold}>${totalPostTip}</Text>
+                </View>
             </View>
         )
     }
@@ -83,7 +80,6 @@ export default function Totals() {
                                 billPayer={billPayer}
                                 taxRate={taxRate}
                             />
-                            {/* <View style={styles.line}/> */}
                         </>)
                     }
                 }}
@@ -119,15 +115,23 @@ const styles = StyleSheet.create({
     },
     summary: {
         container: {
-            backgroundColor: theme.mintlight,
+            backgroundColor: theme.purplelight,
             padding: 20,
         },
+        row: {
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: 8,
+        },
         text: {
-            fontSize: 20,
+            color: '#ffffff',
+            fontSize: 22,
         },
         bold: {
+            color: '#ffffff',
             fontWeight: 'bold',
-            fontSize: 20,
+            fontSize: 22,
         }
     }
 });
