@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import Home from './app/screens/Home';
+import Camera from './app/screens/Camera';
 import ItemList from './app/screens/ItemList';
 import Totals from './app/screens/Totals';
 import Settings from './app/screens/Settings';
@@ -33,6 +34,10 @@ const MainStack = createNativeStackNavigator();
 function MainStackGroup() {
     return (
         <MainStack.Navigator>
+            <MainStack.Screen 
+                name='Upload'
+                component={Camera}
+            />
             <MainStack.Screen 
                 name='Purchases'
                 component={ItemList}
