@@ -34,10 +34,10 @@ const MainStack = createNativeStackNavigator();
 function MainStackGroup() {
     return (
         <MainStack.Navigator>
-            <MainStack.Screen 
+            {/* <MainStack.Screen 
                 name='Upload'
                 component={Camera}
-            />
+            /> */}
             <MainStack.Screen 
                 name='Purchases'
                 component={ItemList}
