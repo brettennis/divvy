@@ -18,13 +18,13 @@ export default function Home() {
         <View style={styles.container}>
             <Text style={styles.logo}>divvy</Text>
             <Button 
-                newStyle={styles.button}
+                newStyle={styles.button1}
                 onPress={() => navigate('Login', {})}
                 disabled={false}
                 text={'My Bills'}
             />
             <Button 
-                newStyle={styles.button}
+                newStyle={styles.button2}
                 onPress={() => navigate('MainStackGroup', {})}
                 disabled={false}
                 text={'New Bill'}
@@ -41,7 +41,14 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 22,
     },
-    button: {
+    button1: {
+        backgroundColor: theme.purplelight,
+        marginLeft: 20,
+        marginRight: 20,
+        marginBottom: 20,
+    },
+    button2: {
+        backgroundColor: theme.purple,
         marginLeft: 20,
         marginRight: 20,
         marginBottom: 20,

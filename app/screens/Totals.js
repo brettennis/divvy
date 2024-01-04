@@ -10,21 +10,22 @@ import { useRoute } from '@react-navigation/native';
 
 import TipSlider from '../components/TipSlider';
 import PatronTotals from '../components/PatronTotals';
+import SaveBillButton from '../components/SaveBillButton';
 
 export default function Totals() {
 
+    let taxRate = 7;
+    let givenTip = 20;
+    
     const { params } = useRoute();
     const patrons = params.patrons;
     const items = params.items;
 
-    const round = value => Math.round(value * 100) / 100;
-    const disp  = value => (value / 100).toFixed(2)
+    const disp = value => (value / 100).toFixed(2)
     const findItem = (target) => items.find(item => item.id === target);
     const billPayer = patrons.find(p => p.isBillPayer);
 
-    const [ tip, setTip ] = useState(20);
-
-    let taxRate = 7;
+    const [ tip, setTip ] = useState(givenTip);
 
     patrons.forEach(p => {
         p.totalOwed = p.purchases.reduce((curr, itemId) => {
@@ -95,7 +96,9 @@ export default function Totals() {
                         taxRate={taxRate}
                     />
                     <Summary />
-                    
+                    <SaveBillButton 
+                        
+                    />
                 </>}
             />
         </View>
@@ -134,5 +137,5 @@ const styles = StyleSheet.create({
             fontWeight: 'bold',
             fontSize: 22,
         }
-    }
+    },
 });

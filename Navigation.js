@@ -8,6 +8,7 @@ import ItemList from './app/screens/ItemList';
 import Totals from './app/screens/Totals';
 import Settings from './app/screens/Settings';
 import Login from './app/screens/Login';
+import Recall from './app/screens/Recall';
 
 import { MaterialCommunityIcons } from '@expo/vector-icons'; 
 import theme from './app/theme/Constants';
@@ -24,6 +25,10 @@ function HomeStackGroup() {
             <HomeStack.Screen 
                 name='Login'
                 component={Login}
+            />
+            <HomeStack.Screen 
+                name='My Bills'
+                component={Recall}
             />
         </HomeStack.Navigator>
     )

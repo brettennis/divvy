@@ -9,13 +9,18 @@ import { useNavigation } from '@react-navigation/native';
 
 import Button from '../components/Button';
 
-export default function Home() {
+export default function Login() {
 
     const { navigate } = useNavigation();
 
     return (
         <View style={styles.container}>
-
+            <Button 
+                newStyle={styles.button}
+                onPress={() => navigate('My Bills', {})}
+                disabled={false}
+                text={'Login'}
+            />
         </View>
     )
 }
