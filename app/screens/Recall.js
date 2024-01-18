@@ -7,47 +7,52 @@ import {
 } from 'react-native';
 import { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import supabase from '../config/supabaseClient';
 
 import Button from '../components/Button';
 
 export default function Recall() {
 
     const { navigate } = useNavigation();
-    const endpoint = 'http://localhost:3000';
+    const [ fetchError, setFetchError ] = useState(null);
     const [ bills, setBills ] = useState([]);
 
     const getBills = async () => {
-        try {
-            const response = await fetch(`${endpoint}/bills`);
-            const data = await response.json();
+        const { data, error } = await supabase
+            .from('bills')
+            .select();
+
+        if (error) {
+            setFetchError('Could not fetch bills');
+            setBills(null);
+            console.log(error);
+        }
+        if (data) {
             setBills(data);
-            console.log(data);
-        } catch(err) {
-            console.error(err.message);
+            setFetchError(null);
         }
     }
 
-    useEffect(() => {
-        getBills();
-    }, []);
+    useEffect(() => {getBills()}, []);
 
     function Bill({ data }) {
         return (
             <View style={styles.bill.container}>
-                <Text>{data.restaurant}</Text>
+                <Text style={styles.bill.text}>{data.restaurant_name}</Text>
             </View>
         )
     }
 
     return (
         <View style={styles.container}>
+            {fetchError && <Text style={styles.text}>{fetchError}</Text>}
             <FlatList 
                 style={styles.bill.list}
                 data={bills}
                 renderItem={({item}) => 
                     <Bill data={item} />
                 }
-                keyExtractor={item => item.restaurant}
+                keyExtractor={item => item.id}
                 // ListFooterComponent={}
             />
         </View>

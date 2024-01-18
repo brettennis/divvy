@@ -21,6 +21,8 @@ export default function Totals() {
     const patrons = params.patrons;
     const items = params.items;
 
+    console.log(patrons);
+
     const disp = value => (value / 100).toFixed(2)
     const findItem = (target) => items.find(item => item.id === target);
     const billPayer = patrons.find(p => p.isBillPayer);

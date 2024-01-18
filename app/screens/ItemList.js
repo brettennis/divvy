@@ -151,7 +151,7 @@ const TEST_PATRONS_1 = [
         id: 0,
         nameFirst: "Joey",
         nameLast: "Tribbiani",
-        phone: "",
+        phone: "704-555-0000",
         isBillPayer: false,
         isCashTipper: false,
         purchases: [2]
@@ -159,7 +159,7 @@ const TEST_PATRONS_1 = [
         id: 1,
         nameFirst: "Ross",
         nameLast: "Geller",
-        phone: "",
+        phone: "704-555-0001",
         isBillPayer: false,
         isCashTipper: false,
         purchases: [1,4,5]
@@ -167,7 +167,7 @@ const TEST_PATRONS_1 = [
         id: 2,
         nameFirst: "Chandler",
         nameLast: "Bing",
-        phone: "",
+        phone: "704-555-0002",
         isBillPayer: false,
         isCashTipper: false,
         purchases: [3]
@@ -175,7 +175,7 @@ const TEST_PATRONS_1 = [
         id: 3,
         nameFirst: "Monica",
         nameLast: "Geller",
-        phone: "",
+        phone: "704-555-0003",
         isBillPayer: false,
         isCashTipper: false,
         purchases: []
@@ -183,7 +183,7 @@ const TEST_PATRONS_1 = [
         id: 4,
         nameFirst: "Phoebe",
         nameLast: "Buffay",
-        phone: "",
+        phone: "704-555-0004",
         isBillPayer: true,
         isCashTipper: false,
         purchases: [7]
@@ -191,7 +191,7 @@ const TEST_PATRONS_1 = [
         id: 5,
         nameFirst: "Rachel",
         nameLast: "Green",
-        phone: "",
+        phone: "704-555-0005",
         isBillPayer: false,
         isCashTipper: false,
         purchases: [6,8]

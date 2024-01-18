@@ -63,7 +63,7 @@ export default function AddPatronModal({ setPatrons, setShowAddPatronModal }) {
                 <Text style={styles.titleInput}>Phone</Text>
                 <TextInput 
                     onChangeText={setNewPatronPhone}
-                    placeholder='(123) 555-6789'
+                    placeholder='123-555-6789'
                     placeholderTextColor={'#636363'}
                     style={styles.input}/>
             </View>
