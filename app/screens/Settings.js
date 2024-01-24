@@ -5,8 +5,8 @@ import {
 } from 'react-native';
 import { useState } from 'react';
 
-import InputRow from '../components/InputRow';
-import SwitchRow from '../components/SwitchRow';
+import InputRow from '../components/settings/InputRow';
+import SwitchRow from '../components/settings/SwitchRow';
 
 export default function Settings() {
 

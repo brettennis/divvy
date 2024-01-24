@@ -40,7 +40,7 @@ export default function PatronTotals({ patron, items, billPayer, taxRate }) {
                             Tax ({taxRate}%)
                         </Text>
                         <Text style={styles.purchasePrice}>
-                            ${disp(taxOwed)}
+                            ${taxOwed}
                         </Text>
                     </View>
                     <View style={styles.totalLine}/>
@@ -49,7 +49,7 @@ export default function PatronTotals({ patron, items, billPayer, taxRate }) {
                             Total before tip
                         </Text>
                         <Text style={styles.purchasePrice}>
-                            ${disp(totalOwedPlusTax)}
+                            ${totalOwedPlusTax}
                         </Text>
                     </View>
                     <View style={styles.containerPurchase}>
@@ -57,7 +57,7 @@ export default function PatronTotals({ patron, items, billPayer, taxRate }) {
                             Tip
                         </Text>
                         <Text style={styles.purchasePrice}>
-                            ${disp(tipOwed)}
+                            ${tipOwed}
                         </Text>
                     </View>
                     <View style={styles.totalLine}/>
@@ -66,7 +66,7 @@ export default function PatronTotals({ patron, items, billPayer, taxRate }) {
                             Total
                         </Text>
                         <Text style={styles.patronOwed}> 
-                            ${disp(totalOwedPlusTip)} 
+                            ${totalOwedPlusTip} 
                         </Text>
                     </View>
                 </View>

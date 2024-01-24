@@ -8,7 +8,7 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import theme from '../theme/Constants';
 
-import Button from '../components/Button';
+import Button from '../components/common/Button';
 
 export default function Home() {
 
@@ -19,7 +19,7 @@ export default function Home() {
             <Text style={styles.logo}>divvy</Text>
             <Button 
                 newStyle={styles.button1}
-                onPress={() => navigate('Login', {})}
+                onPress={() => navigate('My Bills', {})}
                 disabled={false}
                 text={'My Bills'}
             />

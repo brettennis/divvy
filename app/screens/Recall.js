@@ -9,15 +9,19 @@ import { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import supabase from '../config/supabaseClient';
 
-import Button from '../components/Button';
+import Bill from '../components/recall/Bill';
 
 export default function Recall() {
 
     const { navigate } = useNavigation();
+    const [ isLoading, setIsLoading ] = useState(false);
     const [ fetchError, setFetchError ] = useState(null);
     const [ bills, setBills ] = useState([]);
 
-    const getBills = async () => {
+    useEffect(() => {getBills()}, []);
+
+    async function getBills() {
+        setIsLoading(true);
         const { data, error } = await supabase
             .from('bills')
             .select();
@@ -31,14 +35,30 @@ export default function Recall() {
             setBills(data);
             setFetchError(null);
         }
+        setIsLoading(false);
     }
 
-    useEffect(() => {getBills()}, []);
+    const deleteBill = async (target) => {
+        const { data, error } = await supabase
+            .from('bills')
+            .delete()
+            .eq('id', target.id)
+            .select();
 
-    function Bill({ data }) {
+        if (error) {
+            setFetchError('Could not delete bill');
+            console.log(error);
+        }
+        if (data) {
+            setFetchError(null);
+            getBills();
+        }
+    }
+
+    function FilterHeader() {
         return (
-            <View style={styles.bill.container}>
-                <Text style={styles.bill.text}>{data.restaurant_name}</Text>
+            <View>
+                <Text>Filter</Text>
             </View>
         )
     }
@@ -46,22 +66,25 @@ export default function Recall() {
     return (
         <View style={styles.container}>
             {fetchError && <Text style={styles.text}>{fetchError}</Text>}
-            <FlatList 
-                style={styles.bill.list}
-                data={bills}
-                renderItem={({item}) => 
-                    <Bill data={item} />
-                }
-                keyExtractor={item => item.id}
-                // ListFooterComponent={}
-            />
+
+            {isLoading ? <Text>LOADING...</Text> :
+                <FlatList 
+                    data={bills}
+                    renderItem={({item}) => 
+                        <Bill data={item} />
+                    }
+                    keyExtractor={item => item.id}
+                    ListHeaderComponent={<FilterHeader />}
+                    // ListFooterComponent={}
+                />
+            }
         </View>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-
+        flex: 1,
     },
     text: {
         fontSize: 22,
@@ -70,16 +93,5 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         marginRight: 20,
         marginBottom: 20,
-    },
-    bill: {
-        list: {
-
-        },
-        container: {
-
-        },
-        text: {
-            fontSize: 15,
-        }
     },
 });

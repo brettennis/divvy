@@ -8,9 +8,9 @@ import { useState, useEffect } from 'react';
 import theme from '../theme/Constants'
 import { useRoute } from '@react-navigation/native';
 
-import TipSlider from '../components/TipSlider';
-import PatronTotals from '../components/PatronTotals';
-import SaveBillButton from '../components/SaveBillButton';
+import TipSlider from '../components/totals/TipSlider';
+import PatronTotals from '../components/totals/PatronTotals';
+import SaveBillButton from '../components/totals/SaveBillButton';
 
 export default function Totals() {
 
@@ -20,10 +20,9 @@ export default function Totals() {
     const { params } = useRoute();
     const patrons = params.patrons;
     const items = params.items;
+    const receipt = params.receipt;
 
-    console.log(patrons);
-
-    const disp = value => (value / 100).toFixed(2)
+    const disp = value => (value / 100).toFixed(2);
     const findItem = (target) => items.find(item => item.id === target);
     const billPayer = patrons.find(p => p.isBillPayer);
 
@@ -99,7 +98,11 @@ export default function Totals() {
                     />
                     <Summary />
                     <SaveBillButton 
-                        
+                        receipt={receipt}
+                        taxPercent={taxRate}
+                        tipPercent={tip}
+                        patrons={patrons}
+                        items={items}
                     />
                 </>}
             />

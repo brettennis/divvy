@@ -20,6 +20,7 @@ export default function Button({ newStyle, onPress, disabled, text }) {
         <Pressable 
             style={containerStyle}
             onPress={onPress}
+            disabled={disabled}
         >
             <Text style={styles.text}>
                 {text}

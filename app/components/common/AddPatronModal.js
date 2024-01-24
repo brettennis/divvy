@@ -9,7 +9,7 @@ import {
 import { useState } from 'react';
 import 'react-native-get-random-values';
 import { v4 as uuid } from 'uuid';
-import theme from '../theme/Constants'
+import theme from '../../theme/Constants'
 
 export default function AddPatronModal({ setPatrons, setShowAddPatronModal }) {
 
