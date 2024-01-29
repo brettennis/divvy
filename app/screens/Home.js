@@ -9,6 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 import theme from '../theme/Constants';
 
 import Button from '../components/common/Button';
+import ButtonNewBill from '../components/home/ButtonNewBill';
 
 export default function Home() {
 
@@ -17,18 +18,12 @@ export default function Home() {
     return (
         <View style={styles.container}>
             <Text style={styles.logo}>divvy</Text>
-            <Button 
+            <Button text={'My Bills'}
                 newStyle={styles.button1}
                 onPress={() => navigate('My Bills', {})}
                 disabled={false}
-                text={'My Bills'}
             />
-            <Button 
-                newStyle={styles.button2}
-                onPress={() => navigate('MainStackGroup', {})}
-                disabled={false}
-                text={'New Bill'}
-            />
+            <ButtonNewBill />
         </View>
     );
 }
@@ -43,12 +38,6 @@ const styles = StyleSheet.create({
     },
     button1: {
         backgroundColor: theme.purplelight,
-        marginLeft: 20,
-        marginRight: 20,
-        marginBottom: 20,
-    },
-    button2: {
-        backgroundColor: theme.purple,
         marginLeft: 20,
         marginRight: 20,
         marginBottom: 20,
