@@ -14,6 +14,15 @@
     "assetBundlePatterns": [
       "**/*"
     ],
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow Divvy to access your photos in order to parse a receipt.",
+          "cameraPermission": "Allow Divvy to access your camera in order to parse a receipt."
+        }
+      ]
+    ],
     "ios": {
       "supportsTablet": true,
       "config": {
