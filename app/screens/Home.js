@@ -2,14 +2,17 @@ import {
     View, 
     Text, 
     StyleSheet,
-    Pressable
+    Pressable,
+    LogBox
 } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import theme from '../theme/Constants';
-
 import Button from '../components/common/Button';
-import ButtonNewBill from '../components/home/ButtonNewBill';
+
+LogBox.ignoreLogs([
+  'Non-serializable values were found in the navigation state',
+]);
 
 export default function Home() {
 
@@ -20,12 +23,12 @@ export default function Home() {
             <Text style={styles.logo}>divvy</Text>
             <Button text={'My Bills'}
                 newStyle={styles.button1}
-                onPress={() => navigate('My Bills', {})}
+                onPress={() => navigate('My Bills')}
                 disabled={false}
             />
             <Button text={'New Bill'}
                 newStyle={styles.button2}
-                onPress={() => navigate('MainStackGroup', {})}
+                onPress={() => navigate('MainStackGroup')}
                 disabled={false}
             />
         </View>

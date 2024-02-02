@@ -25,8 +25,8 @@ export default function PatronTotals({ patron, items, billPayer, taxRate }) {
 
     const owesText = 
         patron.id !== billPayer.id ? 
-        'owes ' + billPayer.nameFirst : 
-        'spent' ;
+            'owes ' + billPayer.nameFirst 
+            : 'spent' ;
 
     const { 
         taxOwed,
@@ -112,7 +112,7 @@ export default function PatronTotals({ patron, items, billPayer, taxRate }) {
                 {!isDropdown &&
                     <View style={styles.patronInformationRight}> 
                         <Text style={styles.owesText}> {owesText} </Text>
-                        <Text style={styles.patronOwed}> ${totalOwedRounded / 100} </Text>
+                        <Text style={styles.patronOwed}> ${totalOwedRounded} </Text>
                     </View>
                 }
             </View>

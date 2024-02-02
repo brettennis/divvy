@@ -177,13 +177,12 @@ const TEST_PATRONS_1 = [
 export default function ItemList() {
 
     const { params } = useRoute();
+    // console.log(params.receipt);
     const receipt = DEV ? TEST_RECEIPT : params.receipt;
 
     const [showAddPatronModal, setShowAddPatronModal] = useState(false);
     const [continueDisabled, setContinueDisabled] = useState(!DEV);
     const [patrons, setPatrons] = useState(DEV ? TEST_PATRONS_1 : TEST_PATRONS);
-
-    const findItem = (target) => receipt.items.find(item => item.id === target);
 
     const { navigate } = useNavigation();
 
@@ -202,24 +201,24 @@ export default function ItemList() {
     }, [patrons]);
 
     function ContinueButton() {
-        const continueAlert = () => {
-            Alert.alert(
-                'Woah there!', 
-                'There are a couple of items that still need to be divvied up.',
-                [ { text: 'OK' } ]
-            );
-        }
 
-        const callback = 
-            continueDisabled ? 
-            continueAlert :
-            () => navigate('Totals', { patrons, receipt });
+        const callback = () => {
+            if (continueDisabled) {
+                Alert.alert(
+                    'Woah there!', 
+                    'There are a couple of items that still need to be divvied up.',
+                    [ { text: 'OK' } ]
+                );
+                return;
+            }
+
+            navigate('Totals', { patrons, receipt });
+        }
         
         return (
             <Button 
                 newStyle={styles.button}
                 onPress={callback}
-                disabled={continueDisabled}
                 text={'Next'}
             />
         )

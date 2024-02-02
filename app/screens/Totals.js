@@ -4,7 +4,7 @@ import {
     StyleSheet, 
     FlatList
 } from 'react-native';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import theme from '../theme/Constants'
 import { useRoute } from '@react-navigation/native';
 
@@ -25,8 +25,19 @@ export default function Totals() {
     const findItem = (target) => receipt.items.find(item => item.id === target);
     const billPayer = patrons.find(p => p.isBillPayer);
 
-    const [ tip, setTip ] = useState(givenTip);
+    const shiftLeft = (p) => {
+        const newp = { ...p };
+        
+        newp.taxOwed =          disp(p.taxOwed);
+        newp.totalOwedPlusTax = disp(p.totalOwedPlusTax);
+        newp.tipOwed =          disp(p.tipOwed);
+        newp.totalOwedPlusTip = disp(p.totalOwedPlusTip);
+        
+        return newp;
+    }
 
+    const [ tip, setTip ] = useState(givenTip);
+    
     patrons.forEach(p => {
         p.totalOwed = p.purchases.reduce((curr, itemId) => {
             return (findItem(itemId).amount * 100) + curr;
@@ -35,33 +46,33 @@ export default function Totals() {
         p.totalOwedPlusTax =    p.totalOwed + p.taxOwed;
         p.tipOwed =             p.totalOwedPlusTax * (tip * 0.01);
         p.totalOwedPlusTip =    p.totalOwedPlusTax + p.tipOwed;
-        p.totalOwedRounded =    Math.ceil(p.totalOwedPlusTip / 100) * 100;
+        p.totalOwedRounded =    Math.ceil(p.totalOwedPlusTip / 100);
     });
 
-    let totalPreTip = disp(patrons.reduce((accum, p) => {
+    let totalPreTip = patrons.reduce((accum, p) => {
         return p.totalOwedPlusTax + accum;
-    }, 0));
-    let totalTipAmount = disp(patrons.reduce((accum, p) => {
+    }, 0);
+    let totalTipAmount = patrons.reduce((accum, p) => {
         return p.tipOwed + accum;
-    }, 0));
-    let totalPostTip = disp(patrons.reduce((accum, p) => {
+    }, 0);
+    let totalPostTip = patrons.reduce((accum, p) => {
         return p.totalOwedPlusTip + accum;
-    }, 0));
+    }, 0);
 
     function Summary() {
         return (
             <View style={styles.summary.container}>
                 <View style={styles.summary.row}>
                     <Text style={styles.summary.text}>Total before tip</Text>
-                    <Text style={styles.summary.bold}>${totalPreTip}</Text>
+                    <Text style={styles.summary.bold}>${disp(totalPreTip)}</Text>
                 </View>
                 <View style={styles.summary.row}>
                     <Text style={styles.summary.text}>Tip</Text>
-                    <Text style={styles.summary.bold}>${totalTipAmount}</Text>
+                    <Text style={styles.summary.bold}>${disp(totalTipAmount)}</Text>
                 </View>
                 <View style={styles.summary.row}>
                     <Text style={styles.summary.text}>Total</Text>
-                    <Text style={styles.summary.bold}>${totalPostTip}</Text>
+                    <Text style={styles.summary.bold}>${disp(totalPostTip)}</Text>
                 </View>
             </View>
         )
@@ -74,9 +85,10 @@ export default function Totals() {
                 data={patrons}
                 renderItem={({ item }) => {
                     if (item.purchases.length > 0 && !item.isBillPayer) {
+                        const patron = shiftLeft(item);
                         return (<>
                             <PatronTotals 
-                                patron={item} 
+                                patron={patron} 
                                 items={receipt.items} 
                                 billPayer={billPayer}
                                 taxRate={taxRate}
@@ -90,7 +102,7 @@ export default function Totals() {
                 }
                 ListFooterComponent={<>
                     <PatronTotals 
-                        patron={billPayer} 
+                        patron={shiftLeft(billPayer)} 
                         items={receipt.items} 
                         billPayer={billPayer}
                         taxRate={taxRate}
