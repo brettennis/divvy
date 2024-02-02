@@ -32,8 +32,8 @@ export default function SaveBillButton({
     });
 
     const bill = {
-        restaurant_name: receipt.merchant_name,
-        restaurant_address: receipt.merchant_address,
+        restaurant_name: receipt.merchant.name,
+        restaurant_address: receipt.merchant.address,
         date_receipt: receipt.date,
         tax_percent: taxPercent,
         tip_percent: tipPercent,
@@ -52,7 +52,6 @@ export default function SaveBillButton({
             .single();
 
         if (error) {
-            console.log(error);
             setMessage('Something went wrong.');
         }
         if (data) {
@@ -70,12 +69,8 @@ export default function SaveBillButton({
             .select();
 
         if (error) {
-            console.log(error);
             setMessage('Something went wrong.');
         }
-        if (data) {
-            console.log(data);
-        } 
         setIsLoading(false);
     }
 

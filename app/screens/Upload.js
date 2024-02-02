@@ -2,21 +2,25 @@ import {
     View, 
     Text, 
     Platform,
-    Button,
     StyleSheet,
     Image,
+    Alert,
     ActivityIndicator,
+    FlatList,
 } from 'react-native';
 import { useState } from 'react';
 import * as ImagePicker from 'expo-image-picker';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import useFetchOcr from '../config/useFetchOcr';
+import Button from '../components/common/Button';
 
-export default function Camera() {
+const DEV = true;
+
+export default function Upload() {
 
     const { navigate } = useNavigation();
 
-    const { fetchData, isPending, fetchError } = useFetchOcr();
+    const { fetchData, fetchDemo, isPending, fetchError } = useFetchOcr();
 
     const [imageUri, setImageUri] = useState(null);
     const [imageSource, setImageSource] = useState(null);
@@ -68,21 +72,43 @@ export default function Camera() {
         setImageSource(JSON.stringify({ "file_url": host }));
     }
 
-    const submit = async () => {
-        const receipt = await fetchData(imageSource);
-        if (fetchError) console.log(fetchError);
-        navigate('Purchases', { receipt });
+    function ContinueButton() {
+
+        const submit = async () => {
+            if (!imageSource) {
+                Alert.alert(
+                    'Woah there!', 
+                    'Upload an image of your receipt, or choose the demo receipt to continue.',
+                    [ { text: 'OK' } ]
+                );
+                return;
+            }
+
+            const receipt = DEV ? await fetchDemo() : await fetchData(imageSource);
+    
+            if (fetchError) console.log(fetchError);
+            
+            navigate('Purchases', { receipt });
+        }
+        
+        return (
+            <Button 
+                newStyle={styles.button}
+                onPress={submit}
+                text={'Next'}
+            />
+        )
     }
 
     return (
         <View style={styles.container}>
-            <Button title="Pick an image from camera roll" 
+            <Button text="Pick an image from camera roll" 
                 onPress={pickImageLibrary} 
             />
-            <Button title="Take a picture" 
+            <Button text="Take a picture" 
                 onPress={pickImageCamera} 
             />
-            <Button title="Use demo receipt" 
+            <Button text="Use demo receipt" 
                 onPress={pickImageDemo} 
             />
             {imageUri && <Image 
@@ -90,10 +116,7 @@ export default function Camera() {
                 resizeMode='contain'
                 style={{ width: 350, height: 400 }} 
             />}
-            <Button title="Submit" 
-                onPress={submit} 
-                disabled={!imageSource} 
-            />
+            <ContinueButton />
             <ActivityIndicator 
                 color={theme.purple}
                 size={'large'}
@@ -112,4 +135,11 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 15,
     },
+    button: {
+        position: 'absolute',
+        width: 100,
+        height: 60,
+        bottom: 20,
+        right: 20,
+    }
 });
