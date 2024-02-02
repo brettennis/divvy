@@ -23,7 +23,11 @@ export default function Home() {
                 onPress={() => navigate('My Bills', {})}
                 disabled={false}
             />
-            <ButtonNewBill />
+            <Button text={'New Bill'}
+                newStyle={styles.button2}
+                onPress={() => navigate('MainStackGroup', {})}
+                disabled={false}
+            />
         </View>
     );
 }
@@ -38,6 +42,11 @@ const styles = StyleSheet.create({
     },
     button1: {
         backgroundColor: theme.purplelight,
+        marginLeft: 20,
+        marginRight: 20,
+        marginBottom: 20,
+    },
+    button2: {
         marginLeft: 20,
         marginRight: 20,
         marginBottom: 20,

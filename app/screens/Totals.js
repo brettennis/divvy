@@ -14,16 +14,15 @@ import SaveBillButton from '../components/totals/SaveBillButton';
 
 export default function Totals() {
 
-    let taxRate = 7;
+    let taxRate = 7; // TODO: calculate tax rate
     let givenTip = 20;
     
     const { params } = useRoute();
     const patrons = params.patrons;
-    const items = params.items;
     const receipt = params.receipt;
 
     const disp = value => (value / 100).toFixed(2);
-    const findItem = (target) => items.find(item => item.id === target);
+    const findItem = (target) => receipt.items.find(item => item.id === target);
     const billPayer = patrons.find(p => p.isBillPayer);
 
     const [ tip, setTip ] = useState(givenTip);
@@ -78,7 +77,7 @@ export default function Totals() {
                         return (<>
                             <PatronTotals 
                                 patron={item} 
-                                items={items} 
+                                items={receipt.items} 
                                 billPayer={billPayer}
                                 taxRate={taxRate}
                             />
@@ -92,7 +91,7 @@ export default function Totals() {
                 ListFooterComponent={<>
                     <PatronTotals 
                         patron={billPayer} 
-                        items={items} 
+                        items={receipt.items} 
                         billPayer={billPayer}
                         taxRate={taxRate}
                     />
@@ -102,7 +101,6 @@ export default function Totals() {
                         taxPercent={taxRate}
                         tipPercent={tip}
                         patrons={patrons}
-                        items={items}
                     />
                 </>}
             />

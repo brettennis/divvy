@@ -15,6 +15,14 @@ export default function PatronTotals({ patron, items, billPayer, taxRate }) {
 
     const name = patron.nameFirst + ' ' + patron.nameLast;
 
+    const shorten = (text) => {
+        const max = 31;
+        if (text.length > max) {
+            text = text.substring(0, max - 2) + '...';
+        }
+        return text;
+    }
+
     const owesText = 
         patron.id !== billPayer.id ? 
         'owes ' + billPayer.nameFirst : 
@@ -79,7 +87,7 @@ export default function PatronTotals({ patron, items, billPayer, taxRate }) {
         return (
             <View style={styles.containerPurchase}>
                 <Text style={styles.purchaseDescription}>
-                    {item.description}
+                    {shorten(item.description)}
                 </Text>
                 <Text style={styles.purchasePrice}>
                     ${item.amount}

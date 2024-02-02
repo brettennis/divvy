@@ -39,8 +39,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     containerDisabled: {
-        backgroundColor: theme.black,
-        opacity: 0.2,
+        // backgroundColor: theme.black,
+        // opacity: 0.2,
     },
     text: {
         fontWeight: 'bold',

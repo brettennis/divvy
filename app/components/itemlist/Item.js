@@ -97,16 +97,19 @@ export default function Item({ item, patrons, setPatrons, setShowAddPatronModal 
                 style={styles.purchase}
                 onPress={() => setIsDropdown(!isDropdown)}
             >
+                <Text 
+                    numberOfLines={1} 
+                    style={styles.itemDescription}
+                > 
+                    {item.description}
+                </Text>
                 <View style={styles.itemInfoContainer}>
-                    <Text style={styles.itemDescription}>{item.description}</Text>
                     <Text style={styles.itemPrice}>{'$'}{item.amount}</Text>
+                    {selectedPatron &&
+                        <Text numberOfLines={1} style={styles.itemPatronText}>
+                            {selectedPatron.nameFirst}
+                        </Text>}
                 </View>
-                {selectedPatron && <View style={styles.itemPatronContainer}>
-                    <Text style={styles.itemPatronText}>
-                        {selectedPatron.nameFirst}{' '}
-                        {selectedPatron.nameLast}
-                    </Text>
-                </View>}
             </TouchableOpacity>
             <PatronList />
         </View>
@@ -122,11 +125,12 @@ const styles = StyleSheet.create({
         marginTop: 10,
         marginRight: 10,
         marginLeft: 10,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
+        padding: 10,
+        justifyContent: 'center',
     },
     itemInfoContainer: {
-        margin: 15,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     },
     itemDescription: {
         fontSize: 22,
@@ -134,15 +138,10 @@ const styles = StyleSheet.create({
     itemPrice: {
         fontSize: 18,
     },
-    itemPatronContainer: {
-        // backgroundColor: 'purple',
-        margin: 15
-    },
     itemPatronText: {
         fontSize: 18,
     },
     buttonContainer: {
-        // backgroundColor: 'white',
         paddingTop: 3,
         flex: 1,
         flexWrap: 'wrap',

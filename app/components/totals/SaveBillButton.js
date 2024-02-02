@@ -1,11 +1,9 @@
 import { 
     View, 
     Text, 
-    StyleSheet,
-    Pressable
+    StyleSheet
 } from 'react-native';
-import { useState, useEffect } from 'react';
-import { useNavigation } from '@react-navigation/native';
+import { useState } from 'react';
 import supabase from '../../config/supabaseClient';
 
 import Button from '../common/Button';
@@ -14,21 +12,16 @@ export default function SaveBillButton({
     receipt,
     taxPercent,
     tipPercent,
-    patrons,
-    items
+    patrons
 }) {
-
-    const { navigate } = useNavigation();
 
     const [ isLoading, setIsLoading ] = useState(false);
     const [ billId, setBillId ] = useState(null);
     const [ message, setMessage ] = useState(null);
 
     const disp = value => (value / 100).toFixed(2);
-    const findItem = (target) => items.find(item => item.id === target);
+    const findItem = (target) => receipt.items.find(item => item.id === target);
     const billPayer = patrons.find(p => p.isBillPayer);
-
-    const date_receipt = `${receipt.date} ${receipt.time}:00+00`;
 
     patrons.forEach(p => {
         p.totalOwed =           disp(p.totalOwed);
@@ -41,13 +34,13 @@ export default function SaveBillButton({
     const bill = {
         restaurant_name: receipt.merchant_name,
         restaurant_address: receipt.merchant_address,
-        date_receipt,
+        date_receipt: receipt.date,
         tax_percent: taxPercent,
         tip_percent: tipPercent,
-        payer_id: 1,
-        receipt,
+        payer_id: 1, // TODO: set to billPayer.id after storing all patrons
+        receipt: receipt.ocr_text,
         bill_patrons: patrons,
-        bill_items: items
+        bill_items: receipt.items
     }
 
     const storeBill = async () => {

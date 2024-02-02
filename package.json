@@ -39,6 +39,7 @@
     "react-native-tab-view": "^3.5.2",
     "react-native-url-polyfill": "^2.0.0",
     "react-native-web": "~0.19.6",
+    "react-spinners": "^0.13.8",
     "request": "^2.88.2",
     "util": "^0.12.5",
     "uuid": "^9.0.1",

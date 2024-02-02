@@ -5,18 +5,22 @@ import {
     Button,
     StyleSheet,
     Image,
+    ActivityIndicator,
 } from 'react-native';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import * as ImagePicker from 'expo-image-picker';
-import * as FileSystem from 'expo-file-system';
-import { Asset } from 'expo-asset';
-import axios from "axios"; 
+import { useNavigation } from '@react-navigation/native';
+import useFetchOcr from '../config/useFetchOcr';
 
 export default function Camera() {
+
+    const { navigate } = useNavigation();
+
+    const { fetchData, isPending, fetchError } = useFetchOcr();
+
     const [imageUri, setImageUri] = useState(null);
     const [imageSource, setImageSource] = useState(null);
-    const [result, setResult] = useState(null);
-  
+
     const pickImageLibrary = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -64,32 +68,14 @@ export default function Camera() {
         setImageSource(JSON.stringify({ "file_url": host }));
     }
 
-    function fetchOCR() {
-
-        let config = {
-            method: 'post',
-            maxBodyLength: Infinity,
-            url: 'https://api.veryfi.com/api/v8/partner/documents',
-            headers: { 
-                'Content-Type': 'application/json', 
-                'Accept': 'application/json', 
-                'CLIENT-ID': 'vrfmW8Vy6k4vupSsoCVUXX00KaDPDWPMbm6JVku', 
-                'AUTHORIZATION': 'apikey brettennis4:222085c6d3c99263722e28b2005d669a', 
-            },
-            data : imageSource
-        };
-          
-        axios(config)
-        .then((response) => {
-            console.log(JSON.stringify(response.data));
-        })
-        .catch((error) => {
-            console.log(error);
-        });
+    const submit = async () => {
+        const receipt = await fetchData(imageSource);
+        if (fetchError) console.log(fetchError);
+        navigate('Purchases', { receipt });
     }
-  
+
     return (
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <View style={styles.container}>
             <Button title="Pick an image from camera roll" 
                 onPress={pickImageLibrary} 
             />
@@ -104,9 +90,14 @@ export default function Camera() {
                 resizeMode='contain'
                 style={{ width: 350, height: 400 }} 
             />}
-            <Button title="Continue" 
-                onPress={fetchOCR} 
+            <Button title="Submit" 
+                onPress={submit} 
                 disabled={!imageSource} 
+            />
+            <ActivityIndicator 
+                color={theme.purple}
+                size={'large'}
+                animating={isPending}
             />
         </View>
     );
@@ -114,7 +105,9 @@ export default function Camera() {
 
 const styles = StyleSheet.create({
     container: {
-
+        flex: 1, 
+        alignItems: 'center', 
+        justifyContent: 'center'
     },
     text: {
         fontSize: 15,
